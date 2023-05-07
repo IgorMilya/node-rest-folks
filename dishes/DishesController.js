@@ -1,4 +1,14 @@
-import { DishesServiceCreate, DishesServiceGetAll, DishesServiceGetOne, DishesServiceUpdate, DishesServiceDelete, DishesServiceGetByCategory, DishesServiceGetBySUBCategory } from './DishesService.js';
+import {
+    DishesServiceCreate,
+    DishesServiceGetAll,
+    DishesServiceGetOne,
+    DishesServiceUpdate,
+    DishesServiceDelete,
+    DishesServiceGetByCategory,
+    DishesServiceGetBySUBCategory,
+    DishesServiceGetCategories,
+    DishesServiceGetSUBCategories,
+} from './DishesService.js';
 
 export const DishesControllerCreate = async (req, res) => {
     try {
@@ -27,6 +37,15 @@ export const DishesControllerGetByCategory = async (req, res) => {
     }
 };
 
+export const DishesControllerGetCategories = async (req, res) => {
+    try {
+        const categories = await DishesServiceGetCategories();
+        return res.json(categories);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+};
+
 export const DishesControllerGetBySUBCategory = async (req, res) => {
     try {
         const { category, subcategory } = req.params;
@@ -37,9 +56,23 @@ export const DishesControllerGetBySUBCategory = async (req, res) => {
     }
 };
 
+export const DishesControllerGetSUBCategories = async (req, res) => {
+    try {
+        const subcategories = await DishesServiceGetSUBCategories(req.params.category);
+        return res.json(subcategories);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+};
+
 export const DishesControllerGetOne = async (req, res) => {
     try {
+        if (!req.params.id) {
+            return res.status(404).json({ error: 'Incorrect ID' });
+        }
+
         const dish = await DishesServiceGetOne(req.params.id);
+
         return res.json(dish);
     } catch (e) {
         res.status(500).json(e.message);

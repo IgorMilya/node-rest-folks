@@ -19,6 +19,16 @@ export const DishesServiceGetByCategory = async category => {
     return dishes;
 };
 
+export const DishesServiceGetCategories = async () => {
+    const categories = await DishDB.find({}, 'category');
+    const SetCategories = [];
+    categories.forEach(item => {
+        SetCategories.push(item.category);
+    });
+
+    return Array.from(new Set(SetCategories));
+};
+
 export const DishesServiceGetBySUBCategory = async (category, subcategory) => {
     if (!category) {
         throw new Error('category was not set');
@@ -28,6 +38,19 @@ export const DishesServiceGetBySUBCategory = async (category, subcategory) => {
 
     const dishes = await DishDB.find({ category, subcategory });
     return dishes;
+};
+
+export const DishesServiceGetSUBCategories = async category => {
+    if (!category) {
+        throw new Error('category was not set');
+    }
+    const subcategories = await DishDB.find({ category }, 'subcategory');
+    const SetSUBCategories = [];
+    subcategories.forEach(item => {
+        SetSUBCategories.push(item.subcategory);
+    });
+
+    return Array.from(new Set(SetSUBCategories));
 };
 
 export const DishesServiceGetOne = async id => {
