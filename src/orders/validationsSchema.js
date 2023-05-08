@@ -10,13 +10,13 @@ export const ordersValidateSchema = Joi.object({
     tableTitle: Joi.string().min(3),
     dishes: Joi.array().items(
         Joi.object({
-            id: Joi.string().required(),
+            dish_id: Joi.string().required(),
             amount: Joi.number().required().integer().positive(),
         })
     ),
     additionalFood: Joi.array().items(
         Joi.object({
-            id: Joi.string().required(),
+            food_id: Joi.string().required(),
             amount: Joi.number().required().integer().positive(),
         })
     ),

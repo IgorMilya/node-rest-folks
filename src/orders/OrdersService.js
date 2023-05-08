@@ -1,19 +1,19 @@
-import OrderDB from './OrdersDAL.js';
+import { createOrder, getOrdersALL, getOrderByID, getOrderByIDandUpdate, getOrderByIDandDelete } from './OrdersDAL.js';
 
 export const OrdersServiceCreate = async order => {
-    const createOrder = await OrderDB.create(order);
-    return createOrder;
+    const createdOrder = await createOrder(order);
+    return createdOrder;
 };
 
 export const OrdersServiceGetAll = async () => {
-    const orders = await OrderDB.find();
+    const orders = await getOrdersALL();
     return orders;
 };
 export const OrdersServiceGetOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const order = await OrderDB.findById(id);
+    const order = await getOrderByID(id);
     return order;
 };
 
@@ -21,7 +21,7 @@ export const OrdersServiceUpdate = async order => {
     if (!order._id) {
         throw new Error('ID was not set');
     }
-    const updateOrder = await OrderDB.findByIdAndUpdate(order._id, order, { new: true });
+    const updateOrder = await getOrderByIDandUpdate(order);
     return updateOrder;
 };
 
@@ -29,6 +29,6 @@ export const OrdersServiceDelete = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const order = await OrderDB.findByIdAndDelete(id);
+    const order = await getOrderByIDandDelete(id);
     return order;
 };

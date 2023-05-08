@@ -13,7 +13,7 @@ export const dishesValidateSchema = Joi.object({
         Joi.object({
             title: Joi.string().required().min(3),
             price: Joi.number().required().min(1),
-            weight: Joi.number().min(100),
+            weight: Joi.number().positive(),
         })
     ),
 });

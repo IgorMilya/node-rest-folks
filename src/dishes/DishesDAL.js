@@ -1,21 +1,37 @@
-import mongoose from 'mongoose';
+import DishDB from './DishesModel.js';
 
-const additionalFood = new mongoose.Schema({
-    title: { type: String, required: true },
-    price: { type: Number, required: true },
-    weight: Number,
-});
+export const createDish = async dish => {
+    return DishDB.create(dish);
+};
 
-const Dish = new mongoose.Schema({
-    title: { type: String, required: true },
-    price: { type: Number, required: true },
-    picture: { type: String, required: true },
-    description: { type: String, required: true },
-    category: { type: String, required: true },
-    subcategory: String,
-    weight: { type: Number, required: true },
-    bonus: Number,
-    additionalFood: [additionalFood],
-});
+export const findDishALL = async () => {
+    return DishDB.find();
+};
 
-export default mongoose.model('DishDB', Dish, 'dishes');
+export const findDisByID = async id => {
+    return DishDB.findById(id);
+};
+
+export const findDisByIDandUpdate = async dish => {
+    return DishDB.findByIdAndUpdate(dish._id, dish, { new: true });
+};
+
+export const findDisByIDandDelete = async id => {
+    return DishDB.findByIdAndDelete(id);
+};
+
+export const findDishCategory = async category => {
+    return DishDB.find({ category });
+};
+
+export const findCategory = async () => {
+    return DishDB.find({}, 'category');
+};
+
+export const findDishSUBCategory = async ({ category, subcategory }) => {
+    return DishDB.find({ category, subcategory });
+};
+
+export const findSUBCategory = async category => {
+    return DishDB.find({ category }, 'subcategory');
+};

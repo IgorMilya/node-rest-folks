@@ -25,6 +25,19 @@ export const OrdersControllerGetOne = async (req, res) => {
         res.status(500).json(e.message);
     }
 };
+
+// {
+//     $lookup:
+//       {
+//         from: <collection to join>,
+//         localField: <field from the input documents>,
+//         foreignField: <field from the documents of the "from" collection>,
+//         as: <output array field>
+//       }
+//  }
+//  Query.prototype.find() - const arr = await Movie.find({ year: { $gte: 1980, $lte: 1989 } });
+//  [filter] «Object|ObjectId» mongodb filter. If not specified, returns all documents.
+
 export const OrdersControllerUpdate = async (req, res) => {
     try {
         const updateOrder = await OrdersServiceUpdate(req.body);

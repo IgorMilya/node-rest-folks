@@ -1,39 +1,37 @@
-import mongoose from 'mongoose';
+import OrderDB from './OrdersModel.js';
+import DishesDB from '../dishes/DishesModel.js';
 
-const dishes = new mongoose.Schema({
-    id: { type: String, required: true },
-    amount: { type: Number, required: true },
-});
+export const createOrder = async order => {
+    return OrderDB.create(order);
+};
 
-const additionalFood = new mongoose.Schema({
-    id: { type: String, required: true },
-    amount: { type: Number, required: true },
-});
+export const getOrdersALL = async () => {
+    return OrderDB.aggregate([
+        {
+            $lookup: {
+                from: 'dishes',
+                localField: 'dish_id',
+                foreignField: '_id',
+                as: 'dishes',
+            },
+            // $project: {
+            //     'dishes._id': 1,
+            //     'dishes.title': 1,
+            // },
+        },
+    ]);
 
-const deliveryDetails = new mongoose.Schema({
-    phone: { type: String, required: true },
-    name: { type: String, required: true },
-    addresses: { type: String, required: true },
-    email: String,
-});
+    // return OrderDB.find();
+};
 
-export const Order = new mongoose.Schema({
-    status: { type: Boolean, required: true },
-    diningOptions: { type: String, required: true },
-    orderNumber: { type: String, required: true },
-    totalPrice: { type: Number, required: true },
-    paymentMethod: { type: String, required: true },
-    tipAmount: Number,
-    tableTitle: String,
-    dishes: [dishes],
-    additionalFood: [additionalFood],
-    deliveryDetails: deliveryDetails,
-    email: String,
-    notes: String,
-});
+export const getOrderByID = async id => {
+    return OrderDB.findById(id);
+};
 
-export default mongoose.model('OrderDB', Order, 'orders');
+export const getOrderByIDandUpdate = async order => {
+    return OrderDB.findByIdAndUpdate(order._id, order, { new: true });
+};
 
-// ???  for additionalFood / dishes по id шукаємо в БД назву і ціну
-//запит на апдейт резерваціії (+ new) і створення ордера
-//запит на апдейт резерваціії (змінити мтатус) і закрити ордера (status - тру)
+export const getOrderByIDandDelete = async id => {
+    return OrderDB.findByIdAndDelete(id);
+};

@@ -1,12 +1,12 @@
-import DishDB from './DishesDAL.js';
+import { createDish, findDishALL, findDishCategory, findCategory, findDishSUBCategory, findSUBCategory, findDisByID, findDisByIDandUpdate, findDisByIDandDelete } from './DishesDAL.js';
 
 export const DishesServiceCreate = async dish => {
-    const createdDish = await DishDB.create(dish);
+    const createdDish = await createDish(dish);
     return createdDish;
 };
 
 export const DishesServiceGetAll = async () => {
-    const dishes = await DishDB.find();
+    const dishes = await findDishALL();
     return dishes;
 };
 
@@ -15,12 +15,12 @@ export const DishesServiceGetByCategory = async category => {
         throw new Error('category was not set');
     }
 
-    const dishes = await DishDB.find({ category });
+    const dishes = await findDishCategory(category);
     return dishes;
 };
 
 export const DishesServiceGetCategories = async () => {
-    const categories = await DishDB.find({}, 'category');
+    const categories = await findCategory();
     const SetCategories = [];
     categories.forEach(item => {
         SetCategories.push(item.category);
@@ -36,7 +36,7 @@ export const DishesServiceGetBySUBCategory = async (category, subcategory) => {
         throw new Error('subcategory was not set');
     }
 
-    const dishes = await DishDB.find({ category, subcategory });
+    const dishes = await findDishSUBCategory({ category, subcategory });
     return dishes;
 };
 
@@ -44,7 +44,7 @@ export const DishesServiceGetSUBCategories = async category => {
     if (!category) {
         throw new Error('category was not set');
     }
-    const subcategories = await DishDB.find({ category }, 'subcategory');
+    const subcategories = await findSUBCategory(category);
     const SetSUBCategories = [];
     subcategories.forEach(item => {
         SetSUBCategories.push(item.subcategory);
@@ -57,7 +57,7 @@ export const DishesServiceGetOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const dish = await DishDB.findById(id);
+    const dish = await findDisByID(id);
     return dish;
 };
 
@@ -65,7 +65,7 @@ export const DishesServiceUpdate = async dish => {
     if (!dish._id) {
         throw new Error('ID was not set');
     }
-    const updatedDish = await DishDB.findByIdAndUpdate(dish._id, dish, { new: true });
+    const updatedDish = await findDisByIDandUpdate(dish);
     return updatedDish;
 };
 
@@ -73,6 +73,6 @@ export const DishesServiceDelete = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const dish = await DishDB.findByIdAndDelete(id);
+    const dish = await findDisByIDandDelete(id);
     return dish;
 };
