@@ -35,3 +35,7 @@ export const findDishSUBCategory = async ({ category, subcategory }) => {
 export const findSUBCategory = async category => {
     return DishDB.find({ category }, 'subcategory');
 };
+
+export const findDisByString = async searchString => {
+    return DishDB.find({ $or: [{ title: searchString }, { description: searchString }] });
+};

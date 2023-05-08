@@ -23,3 +23,5 @@
 #### example request http://localhost:5001/api/restaurant/dishes/categories/all - GET all categories - array
 
 #### example request http://localhost:5001/api/restaurant/dishes/categories/meat - GET all subcategories in categories (category - "meat" in example)
+
+#### example request http://localhost:5001/api/restaurant/dishes/search/td?q=onion // after q - searching word

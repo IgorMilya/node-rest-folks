@@ -12,6 +12,7 @@ import {
     DishesControllerGetBySUBCategory,
     DishesControllerGetCategories,
     DishesControllerGetSUBCategories,
+    DishesControllerSearch,
 } from './DishesController.js';
 
 export const dishRouter = new Router();
@@ -24,5 +25,6 @@ dishRouter.get('/by_category/:category/:subcategory', DishesControllerGetBySUBCa
 dishRouter.get('/:id', DishesControllerGetOne);
 dishRouter.get('/categories/all', DishesControllerGetCategories);
 dishRouter.get('/categories/:category', DishesControllerGetSUBCategories);
+dishRouter.get('/search/td', DishesControllerSearch);
 dishRouter.put('/', DishesControllerUpdate);
 dishRouter.delete('/:id', DishesControllerDelete);

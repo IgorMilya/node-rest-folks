@@ -1,12 +1,14 @@
 import mongoose from 'mongoose';
 
 const dishes = new mongoose.Schema({
-    dish_id: { type: String, required: true },
+    title: { type: String, required: true },
+    price: { type: Number, required: true },
     amount: { type: Number, required: true },
 });
 
 const additionalFood = new mongoose.Schema({
-    food_id: { type: String, required: true },
+    title: { type: String, required: true },
+    price: { type: Number, required: true },
     amount: { type: Number, required: true },
 });
 
@@ -34,6 +36,5 @@ export const Order = new mongoose.Schema({
 
 export default mongoose.model('OrderDB', Order, 'orders');
 
-// ???  for additionalFood / dishes по id шукаємо в БД назву і ціну
 //запит на апдейт резерваціії (+ new) і створення ордера
 //запит на апдейт резерваціії (змінити мтатус) і закрити ордера (status - тру)

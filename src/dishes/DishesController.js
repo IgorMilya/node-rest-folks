@@ -8,6 +8,7 @@ import {
     DishesServiceGetBySUBCategory,
     DishesServiceGetCategories,
     DishesServiceGetSUBCategories,
+    DishesServiceSearch,
 } from './DishesService.js';
 
 export const DishesControllerCreate = async (req, res) => {
@@ -78,6 +79,7 @@ export const DishesControllerGetOne = async (req, res) => {
         res.status(500).json(e.message);
     }
 };
+
 export const DishesControllerUpdate = async (req, res) => {
     try {
         const updatedDish = await DishesServiceUpdate(req.body);
@@ -92,6 +94,18 @@ export const DishesControllerDelete = async (req, res) => {
         if (!dish) {
             res.status(404).json('ID was not founded or already deleted');
         }
+        return res.json(dish);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+};
+
+export const DishesControllerSearch = async (req, res) => {
+    const { q } = req.query;
+
+    try {
+        const dish = await DishesServiceSearch(q);
+
         return res.json(dish);
     } catch (e) {
         res.status(500).json(e.message);

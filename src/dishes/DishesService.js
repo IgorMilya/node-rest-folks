@@ -1,4 +1,15 @@
-import { createDish, findDishALL, findDishCategory, findCategory, findDishSUBCategory, findSUBCategory, findDisByID, findDisByIDandUpdate, findDisByIDandDelete } from './DishesDAL.js';
+import {
+    createDish,
+    findDishALL,
+    findDishCategory,
+    findCategory,
+    findDishSUBCategory,
+    findSUBCategory,
+    findDisByID,
+    findDisByIDandUpdate,
+    findDisByIDandDelete,
+    findDisByString,
+} from './DishesDAL.js';
 
 export const DishesServiceCreate = async dish => {
     const createdDish = await createDish(dish);
@@ -74,5 +85,14 @@ export const DishesServiceDelete = async id => {
         throw new Error('ID was not set');
     }
     const dish = await findDisByIDandDelete(id);
+    return dish;
+};
+
+export const DishesServiceSearch = async q => {
+    if (!q) {
+        throw new Error('String isn`t correct');
+    }
+    const searchString = new RegExp(q, 'i');
+    const dish = await findDisByString(searchString);
     return dish;
 };
