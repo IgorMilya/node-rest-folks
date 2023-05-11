@@ -12,7 +12,7 @@ export const getTableDataAccess = async id => {
   return TableModel.findById(id)
 }
 
-export const updateTableStatusDataAccess = async (id, status) => {
+export const updateTableInfoDataAccess = async (id, status) => {
   return TableModel.findByIdAndUpdate(id, status)
 }
 
@@ -20,6 +20,10 @@ export const deleteTableDataAccess = async id => {
   return TableModel.findByIdAndDelete(id)
 }
 
-export const addReservationDataAccess = async (id, reservation) => {
-  return TableModel.findByIdAndUpdate(id, reservation)
+export const addReservationDataAccess = async (id, data) => {
+  return TableModel.findByIdAndUpdate(id, data)
+}
+
+export const removeReservationDataAccess = async (filterField, fieldToRemove) => {
+  return TableModel.updateOne(filterField, fieldToRemove)
 }
