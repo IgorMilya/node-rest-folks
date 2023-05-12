@@ -11,9 +11,9 @@ const reservationsInfoSchema = new mongoose.Schema({
 })
 
 export const tableSchema = new mongoose.Schema({
-  number: { type: String, required: true },
+  number: { type: String, required: true, unique: true },
   reserved: { type: Boolean, required: true, default: false },
-  reservationInfo: [reservationsInfoSchema],
+  reservationInfo: { type: [reservationsInfoSchema], required: true, default: [] },
 })
 
 export const TableModel = mongoose.model('table', tableSchema)
