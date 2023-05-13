@@ -68,7 +68,8 @@ export const getReservationBySelectedDateService = async (id, date) => {
 
 export const updateReservationService = async (id, data) => {
   const { reservationInfo } = await getTableDataAccess(id)
-  const updatedInfo = reservationInfo.map(item => (item._id == data._id ? data : item))
+
+  const updatedInfo = reservationInfo.map(item => (item.id === data.id ? data : item))
 
   return await updateTableInfoDataAccess(id, { reservationInfo: updatedInfo })
 }
