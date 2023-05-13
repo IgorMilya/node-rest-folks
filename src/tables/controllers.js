@@ -1,99 +1,93 @@
-import {
-  getTablesService,
-  addTableService,
-  getTableReservationInfoService,
-  changeTableStatusService,
-  deleteTableService,
-  addReservationService,
-  removeReservationService,
-  getReservationBySelectedDateService,
-  updateReservationService,
-} from './services.js'
+import * as services from './services.js'
 
-export const addTableController = async (req, res) => {
+export const getFreeTables = async (req, res) => {
   try {
-    const data = await addTableService(req.body)
+    const data = await services.getFreeTables()
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
   }
 }
 
-export const deleteTableController = async (req, res) => {
+export const getTableReservationInfo = async (req, res) => {
   try {
-    const data = await deleteTableService(req.params.id)
+    const data = await services.getTableReservationInfo(req.params.id)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
   }
 }
 
-export const getTablesController = async (req, res) => {
-  try {
-    const data = await getTablesService()
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-export const getTableReservationInfoController = async (req, res) => {
-  try {
-    const data = await getTableReservationInfoService(req.params.id)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-export const updateTableStatusController = async (req, res) => {
-  try {
-    const data = await changeTableStatusService(req.params.id)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-export const addReservationController = async (req, res) => {
-  try {
-    const data = await addReservationService(req.params.id, {
-      $push: { reservationInfo: req.body },
-    })
-
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-export const removeReservationController = async (req, res) => {
-  try {
-    const { tableNumber, id } = req.params
-    const data = await removeReservationService(
-      { number: tableNumber },
-      { $pull: { reservationInfo: { _id: id } } },
-    )
-
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-export const getReservationBySelectedDateController = async (req, res) => {
+export const getReservationBySelectDate = async (req, res) => {
   const { id, date } = req.params
   try {
-    const data = await getReservationBySelectedDateService(id, date)
+    const data = await services.getReservationBySelectedDate(id, date)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
   }
 }
 
-export const updateReservationController = async (req, res) => {
+export const addNewTable = async (req, res) => {
   try {
-    const data = await updateReservationService(req.params.id, req.body)
+    const data = await services.addNewTable(req.body)
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const deleteTable = async (req, res) => {
+  try {
+    const data = await services.deleteTable(req.params.id)
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const getAllTables = async (req, res) => {
+  try {
+    const data = await services.getAllTables()
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const updateTableStatus = async (req, res) => {
+  try {
+    const data = await services.changeTableStatus(req.params.id)
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const addNewReservation = async (req, res) => {
+  try {
+    const data = await services.addNewReservation(req.params.id, req.body)
+
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const removeReservation = async (req, res) => {
+  try {
+    const { tableNumber, id } = req.params
+    const data = await services.removeReservation(tableNumber, id)
+
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+export const updateReservation = async (req, res) => {
+  try {
+    const data = await services.updateReservation(req.params.id, req.body)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)

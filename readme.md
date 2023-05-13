@@ -30,31 +30,75 @@
 
 ```
 [
-  {
-    "_id": "64581c123479f2dbb85c8bcb",
-    "number": "T-01",
-    "reserved": false,
-    "reservationInfo": [
-      {
-        "date": "2023-05-29",
-        "time": "16:00",
-        "clientName": "Oleksandr",
-        "phoneNumber": "123121323",
-        "email": "kjhasawdawdk@gmail.com",
-        "visitTag": "birthday",
-        "notes": "ajwoidawda wdhawiudhawi",
-        "_id": "64595f624ef0d5a27f83b09b"
-      }
-    ],
-    "__v": 0
-  },
-  {
-    "_id": "64581c173479f2dbb85c8bcd",
-    "number": "T-02",
-    "reserved": true,
-    "reservationInfo": [],
-    "__v": 0
-  }
+    {
+        "number": "T-01",
+        "tableLimit": 6,
+        "reserved": false,
+        "reservationInfo": [],
+        "id": "645fc5914684cada592ce0b0"
+    },
+    {
+        "number": "T-02",
+        "tableLimit": 6,
+        "reserved": false,
+        "reservationInfo": [
+            {
+                "date": "2023-05-13",
+                "time": "18:00",
+                "clientName": "TEST",
+                "phoneNumber": "675871098012",
+                "email": "kjhask@gmail.com",
+                "visitTag": "bdaaday",
+                "notes": "ajwoidhawiudhawi",
+                "id": "645fcf78c69d6a01d0e04298"
+            },
+            {
+                "date": "2023-05-13",
+                "time": "18:00",
+                "clientName": "TEST",
+                "phoneNumber": "675871098012",
+                "email": "kjhask@gmail.com",
+                "visitTag": "bdaaday",
+                "notes": "ajwoidhawiudhawi",
+                "id": "645fcf7ac69d6a01d0e0429a"
+            }
+        ],
+        "id": "645fc59a4684cada592ce0b2"
+    },
+]
+
+```
+
+</details>
+
+>##### Get All free tables
+>GET - http://localhost:5001/api/restaurant/tables/free
+
+<details><summary>response example</summary>
+
+```
+[
+    {
+        "number": "T-01",
+        "id": "645fc5914684cada592ce0b0"
+    },
+    {
+        "number": "T-03",
+        "id": "645fc5ea4684cada592ce0b4"
+    },
+    {
+        "number": "T-04",
+        "id": "645fc5ef4684cada592ce0b6"
+    },
+    {
+        "number": "T-05",
+        "id": "645fc5f44684cada592ce0b8"
+    },
+    {
+        "number": "T-06",
+        "id": "645fc5f84684cada592ce0ba"
+    },
+
 ]
 
 ```
@@ -75,6 +119,12 @@
     ]
 }
 
+or
+
+{
+    "message": "No reservations for this table"
+}
+
 ```
 
 </details>
@@ -90,7 +140,10 @@
 <details><summary>body example</summary>
 
 ```
-{ "number": "T-10"}
+{
+    "number": "T-12",
+    "tableLimit": 2
+}
 
 ```
 
