@@ -45,7 +45,6 @@ export const DishesServiceGetCategories = async () => {
         categories.map(async item => {
             const category = await findOne(item);
 
-            console.log(category);
             return { category: item, picture: category?.picture || 'not set' };
         })
     );
