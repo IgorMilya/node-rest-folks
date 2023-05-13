@@ -1,30 +1,31 @@
-
 ## DISHES
 
-#### example request http://localhost:5001/api/restaraunt/dishes - GET - get all dishes
+#### example request http://localhost:5001/api/restaurant/dishes - GET - get all dishes
 
-#### example request http://localhost:5001/api/restaraunt/dishes - POST - create 1 dish /
+#### example request http://localhost:5001/api/restaurant/dishes - POST - create 1 dish /
 
-#### example request http://localhost:5001/api/restaraunt/dishes - PUT - update 1 dish / id in body - required in this request
+#### example request http://localhost:5001/api/restaurant/dishes - PUT - update 1 dish / id in body - required in this request
 
-#### example request http://localhost:5001/api/restaraunt/dishes/by_category/meat - GET all dishes by category (category - "meat" in example)
+#### example request http://localhost:5001/api/restaurant/dishes/by_category/meat - GET all dishes by category (category - "meat" in example)
 
-#### example request http://localhost:5001/api/restaraunt/dishes/by_category/meat/pork - GET all dishes by category and subcategory (category - "meat" , subcategory - "pork" in example)
+#### example request http://localhost:5001/api/restaurant/dishes/by_category/meat/pork - GET all dishes by category and subcategory (category - "meat" , subcategory - "pork" in example)
 
-#### example request http://localhost:5001/api/restaraunt/dishes/6453fe613b229fb1d201d915 - GET 1 dish by ID
+#### example request http://localhost:5001/api/restaurant/dishes/6453fe613b229fb1d201d915 - GET 1 dish by ID
 
-#### example request http://localhost:5001/api/restaraunt/dishes/6453ff148ac78a327c1fe933 - DELETE 1 dish by ID
+#### example request http://localhost:5001/api/restaurant/dishes/6453ff148ac78a327c1fe933 - DELETE 1 dish by ID
 
-#### example request http://localhost:5001/api/restaraunt/dishes/categories/all - GET all categories - array
+#### example request http://localhost:5001/api/restaurant/dishes/categories/all - GET all categories - array
 
-#### example request http://localhost:5001/api/restaraunt/dishes/categories/meat - GET all subcategories in categories (category - "meat" in example)
+#### example request http://localhost:5001/api/restaurant/dishes/categories/meat - GET all subcategories in categories (category - "meat" in example)
 
 ---
 
 ## TABLES (reservation)
 
->##### Get all tables info
->GET - http://localhost:5001/api/restaurant/tables
+> ##### Get all tables info
+>
+> GET - http://localhost:5001/api/restaurant/tables
+
 <details><summary>response example</summary>
 
 ```
@@ -60,8 +61,9 @@
 
 </details>
 
->##### Get the reservation `time` for a specific table for the current date by `table id`
->GET - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
+> ##### Get the reservation `time` for a specific table for the current date by `table id`
+>
+> GET - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
 
 <details><summary>response example</summary>
 
@@ -77,12 +79,14 @@
 
 </details>
 
+> ##### Change table `status` by `table id`
+>
+> PUT - http://localhost:5001/api/restaurant/tables/6459612787a543d932c11031
 
->##### Change table `status` by `table id`
->PUT - http://localhost:5001/api/restaurant/tables/6459612787a543d932c11031
-
->##### Add new `table`
+> ##### Add new `table`
+>
 > POST - http://localhost:5001/api/restaurant/tables
+
 <details><summary>body example</summary>
 
 ```
@@ -92,8 +96,10 @@
 
 </details>
 
->##### Add `new reservation` info to the table by `table id`
->POST - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
+> ##### Add `new reservation` info to the table by `table id`
+>
+> POST - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
+
 <details><summary>body example</summary>
 
 ```
@@ -111,10 +117,30 @@
 
 </details>
 
->##### Delete `reservation` info from the table by `reservation id` and `table number`
->DELETE - http://localhost:5001/api/restaurant/tables/reservation/T-01/6459612787a543d932c11034
+> ##### Delete `reservation` info from the table by `reservation id` and `table number`
+>
+> DELETE - http://localhost:5001/api/restaurant/tables/reservation/T-01/6459612787a543d932c11034
 
->##### Delete `table` by `table id`
+> ##### Delete `table` by `table id`
+>
 > DELETE - http://localhost:5001/api/restaurant/tables/6459612787a543d932c11031
 
 ---
+
+## ORDERS
+
+#### example request http://localhost:5001/api/restaurant/orders - GET - get all orders
+
+#### example request http://localhost:5001/api/restaurant/orders/645e2c4a66bbb2ae16af76e3 - GET - get one order by id
+
+#### example request http://localhost:5001/api/restaurant/orders - POST - create one order
+
+#### example request http://localhost:5001/api/restaurant/orders - PUT - update one order
+
+#### example request http://localhost:5001/api/restaurant/orders/645e2c4a66bbb2ae16af76e3 - DELETE - get one order by id
+
+---
+
+## categories
+
+#### example request http://localhost:5001/api/restaurant/categories

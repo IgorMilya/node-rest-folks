@@ -11,6 +11,8 @@ import {
     findDisByString,
 } from './DishesDAL.js';
 
+import { findOne } from '../categories/CategoriesDAL.js';
+
 export const DishesServiceCreate = async dish => {
     const createdDish = await createDish(dish);
     return createdDish;
@@ -31,13 +33,24 @@ export const DishesServiceGetByCategory = async category => {
 };
 
 export const DishesServiceGetCategories = async () => {
-    const categories = await findCategory();
+    const categoriesAll = await findCategory();
     const SetCategories = [];
-    categories.forEach(item => {
+    categoriesAll.forEach(item => {
         SetCategories.push(item.category);
     });
 
-    return Array.from(new Set(SetCategories));
+    const categories = Array.from(new Set(SetCategories));
+
+    const result = await Promise.all(
+        categories.map(async item => {
+            const category = await findOne(item);
+
+            console.log(category);
+            return { category: item, picture: category?.picture || 'not set' };
+        })
+    );
+
+    return result;
 };
 
 export const DishesServiceGetBySUBCategory = async (category, subcategory) => {
@@ -73,7 +86,7 @@ export const DishesServiceGetOne = async id => {
 };
 
 export const DishesServiceUpdate = async dish => {
-    if (!dish._id) {
+    if (!dish.id) {
         throw new Error('ID was not set');
     }
     const updatedDish = await findDisByIDandUpdate(dish);

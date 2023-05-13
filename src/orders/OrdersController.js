@@ -37,7 +37,12 @@ export const OrdersControllerUpdate = async (req, res) => {
 export const OrdersControllerDelete = async (req, res) => {
     try {
         const order = await OrdersServiceDelete(req.params.id);
-        return res.json(order);
+
+        if (!order) {
+            res.status(404).json('ID was not founded or already deleted');
+        } else {
+            return res.json(order);
+        }
     } catch (e) {
         res.status(500).json(e.message);
     }

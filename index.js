@@ -3,6 +3,7 @@ import cors from 'cors';
 import { tablesDefaultPath, tablesRouter } from './src/tables/routes.js';
 import { orderDefaultPath, orderRouter } from './src/orders/orderRouter.js';
 import { dishesDefaultPath, dishRouter } from './src/dishes/dishesRouter.js';
+import { categoriesDefaultPath, categoryRouter } from './src/categories/CategoriesRouter.js';
 
 export const app = express();
 
@@ -18,3 +19,4 @@ app.use((req, res, next) => {
 app.use(tablesDefaultPath, tablesRouter);
 app.use(orderDefaultPath, orderRouter);
 app.use(dishesDefaultPath, dishRouter);
+app.use(categoriesDefaultPath, categoryRouter);

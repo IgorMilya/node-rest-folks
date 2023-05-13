@@ -13,7 +13,7 @@ export const getOrderByID = async id => {
 };
 
 export const getOrderByIDandUpdate = async order => {
-    return OrderDB.findByIdAndUpdate(order._id, order, { new: true });
+    return OrderDB.findByIdAndUpdate(order.id, order, { new: true });
 };
 
 export const getOrderByIDandDelete = async id => {

@@ -93,8 +93,9 @@ export const DishesControllerDelete = async (req, res) => {
         const dish = await DishesServiceDelete(req.params.id);
         if (!dish) {
             res.status(404).json('ID was not founded or already deleted');
+        } else {
+            return res.json(dish);
         }
-        return res.json(dish);
     } catch (e) {
         res.status(500).json(e.message);
     }

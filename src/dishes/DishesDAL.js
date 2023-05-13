@@ -1,4 +1,5 @@
 import DishDB from './DishesModel.js';
+import CategoryDB from '../categories/CategoriesModel.js';
 
 export const createDish = async dish => {
     return DishDB.create(dish);
@@ -13,7 +14,7 @@ export const findDisByID = async id => {
 };
 
 export const findDisByIDandUpdate = async dish => {
-    return DishDB.findByIdAndUpdate(dish._id, dish, { new: true });
+    return DishDB.findByIdAndUpdate(dish.id, dish, { new: true });
 };
 
 export const findDisByIDandDelete = async id => {
