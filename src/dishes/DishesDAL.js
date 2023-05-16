@@ -6,15 +6,11 @@ export const createDish = async dish => {
 };
 
 export const findDishALL = async findValues => {
-    console.log(findValues);
-
-    return DishDB.find(findValues);
-
-    // return DishDB.aggregate([
-    //     {
-    //         $match: findValues,
-    //     },
-    // ]);
+    return await DishDB.aggregate([
+        {
+            $match: findValues,
+        },
+    ]);
 };
 
 export const findDisByID = async id => {

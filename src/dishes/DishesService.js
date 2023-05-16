@@ -8,8 +8,9 @@ export const DishesServiceCreate = async dish => {
 };
 
 export const DishesServiceGetAll = async ({ q, category, subcategory }) => {
-    const { id: categoryID } = !!category && (await findOne(category, 'id'));
-    const { id: subcategoryID } = !!subcategory && (await findOne(subcategory, 'id'));
+    console.log(await findOne(category, 'id'));
+    const { _id: categoryID } = !!category && (await findOne(category, 'id'));
+    const { _id: subcategoryID } = !!subcategory && (await findOne(subcategory, 'id'));
 
     const findValues = {
         ...(!!q && { $or: [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }] }),
