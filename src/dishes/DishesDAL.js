@@ -5,8 +5,16 @@ export const createDish = async dish => {
     return DishDB.create(dish);
 };
 
-export const findDishALL = async () => {
-    return DishDB.find();
+export const findDishALL = async findValues => {
+    console.log(findValues);
+
+    return DishDB.find(findValues);
+
+    // return DishDB.aggregate([
+    //     {
+    //         $match: findValues,
+    //     },
+    // ]);
 };
 
 export const findDisByID = async id => {
@@ -19,24 +27,4 @@ export const findDisByIDandUpdate = async dish => {
 
 export const findDisByIDandDelete = async id => {
     return DishDB.findByIdAndDelete(id);
-};
-
-export const findDishCategory = async category => {
-    return DishDB.find({ category });
-};
-
-export const findCategory = async () => {
-    return DishDB.find({}, 'category');
-};
-
-export const findDishSUBCategory = async ({ category, subcategory }) => {
-    return DishDB.find({ category, subcategory });
-};
-
-export const findSUBCategory = async category => {
-    return DishDB.find({ category }, 'subcategory');
-};
-
-export const findDisByString = async searchString => {
-    return DishDB.find({ $or: [{ title: searchString }, { description: searchString }] });
 };

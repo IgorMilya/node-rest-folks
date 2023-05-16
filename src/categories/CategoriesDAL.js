@@ -5,11 +5,15 @@ export const createCategory = async category => {
 };
 
 export const findCategoryALL = async () => {
-    return CategoryDB.find();
+    return CategoryDB.find({ type: 'category' }, { title: 1, picture: 1 });
 };
 
-export const findOne = async category => {
-    return CategoryDB.findOne({ title: category }, 'picture');
+export const findSubCategoryByCategory = async parentId => {
+    return CategoryDB.find({ parent: parentId }, 'title');
+};
+
+export const findOne = async (category, field) => {
+    return CategoryDB.findOne({ title: category }, field);
 };
 
 export const findCategoryByIDandUpdate = async category => {

@@ -1,15 +1,4 @@
-import {
-    DishesServiceCreate,
-    DishesServiceGetAll,
-    DishesServiceGetOne,
-    DishesServiceUpdate,
-    DishesServiceDelete,
-    DishesServiceGetByCategory,
-    DishesServiceGetBySUBCategory,
-    DishesServiceGetCategories,
-    DishesServiceGetSUBCategories,
-    DishesServiceSearch,
-} from './DishesService.js';
+import { DishesServiceCreate, DishesServiceGetAll, DishesServiceGetOne, DishesServiceUpdate, DishesServiceDelete } from './DishesService.js';
 
 export const DishesControllerCreate = async (req, res) => {
     try {
@@ -22,45 +11,10 @@ export const DishesControllerCreate = async (req, res) => {
 
 export const DishesControllerGetAll = async (req, res) => {
     try {
-        const dishes = await DishesServiceGetAll();
+        const { q, category, subcategory } = req.query;
+
+        const dishes = await DishesServiceGetAll({ q, category, subcategory });
         return res.json(dishes);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-};
-
-export const DishesControllerGetByCategory = async (req, res) => {
-    try {
-        const dishes = await DishesServiceGetByCategory(req.params.category);
-        return res.json(dishes);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-};
-
-export const DishesControllerGetCategories = async (req, res) => {
-    try {
-        const categories = await DishesServiceGetCategories();
-        return res.json(categories);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-};
-
-export const DishesControllerGetBySUBCategory = async (req, res) => {
-    try {
-        const { category, subcategory } = req.params;
-        const dishes = await DishesServiceGetBySUBCategory(category, subcategory);
-        return res.json(dishes);
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-};
-
-export const DishesControllerGetSUBCategories = async (req, res) => {
-    try {
-        const subcategories = await DishesServiceGetSUBCategories(req.params.category);
-        return res.json(subcategories);
     } catch (e) {
         res.status(500).json(e.message);
     }
@@ -96,18 +50,6 @@ export const DishesControllerDelete = async (req, res) => {
         } else {
             return res.json(dish);
         }
-    } catch (e) {
-        res.status(500).json(e.message);
-    }
-};
-
-export const DishesControllerSearch = async (req, res) => {
-    const { q } = req.query;
-
-    try {
-        const dish = await DishesServiceSearch(q);
-
-        return res.json(dish);
     } catch (e) {
         res.status(500).json(e.message);
     }

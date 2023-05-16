@@ -1,15 +1,4 @@
-import {
-    createDish,
-    findDishALL,
-    findDishCategory,
-    findCategory,
-    findDishSUBCategory,
-    findSUBCategory,
-    findDisByID,
-    findDisByIDandUpdate,
-    findDisByIDandDelete,
-    findDisByString,
-} from './DishesDAL.js';
+import { createDish, findDishALL, findDisByID, findDisByIDandUpdate, findDisByIDandDelete } from './DishesDAL.js';
 
 import { findOne } from '../categories/CategoriesDAL.js';
 
@@ -18,62 +7,19 @@ export const DishesServiceCreate = async dish => {
     return createdDish;
 };
 
-export const DishesServiceGetAll = async () => {
-    const dishes = await findDishALL();
+export const DishesServiceGetAll = async ({ q, category, subcategory }) => {
+    const { id: categoryID } = !!category && (await findOne(category, 'id'));
+    const { id: subcategoryID } = !!subcategory && (await findOne(subcategory, 'id'));
+
+    const findValues = {
+        ...(!!q && { $or: [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }] }),
+        ...(!!category && { categoryID }),
+        ...(!!subcategory && { subcategoryID }),
+    };
+
+    const dishes = await findDishALL(findValues);
+
     return dishes;
-};
-
-export const DishesServiceGetByCategory = async category => {
-    if (!category) {
-        throw new Error('category was not set');
-    }
-
-    const dishes = await findDishCategory(category);
-    return dishes;
-};
-
-export const DishesServiceGetCategories = async () => {
-    const categoriesAll = await findCategory();
-    const SetCategories = [];
-    categoriesAll.forEach(item => {
-        SetCategories.push(item.category);
-    });
-
-    const categories = Array.from(new Set(SetCategories));
-
-    const result = await Promise.all(
-        categories.map(async item => {
-            const category = await findOne(item);
-
-            return { category: item, picture: category?.picture || 'not set' };
-        })
-    );
-
-    return result;
-};
-
-export const DishesServiceGetBySUBCategory = async (category, subcategory) => {
-    if (!category) {
-        throw new Error('category was not set');
-    } else if (!subcategory) {
-        throw new Error('subcategory was not set');
-    }
-
-    const dishes = await findDishSUBCategory({ category, subcategory });
-    return dishes;
-};
-
-export const DishesServiceGetSUBCategories = async category => {
-    if (!category) {
-        throw new Error('category was not set');
-    }
-    const subcategories = await findSUBCategory(category);
-    const SetSUBCategories = [];
-    subcategories.forEach(item => {
-        SetSUBCategories.push(item.subcategory);
-    });
-
-    return Array.from(new Set(SetSUBCategories));
 };
 
 export const DishesServiceGetOne = async id => {
@@ -97,14 +43,5 @@ export const DishesServiceDelete = async id => {
         throw new Error('ID was not set');
     }
     const dish = await findDisByIDandDelete(id);
-    return dish;
-};
-
-export const DishesServiceSearch = async q => {
-    if (!q) {
-        throw new Error('String isn`t correct');
-    }
-    const searchString = new RegExp(q, 'i');
-    const dish = await findDisByString(searchString);
     return dish;
 };

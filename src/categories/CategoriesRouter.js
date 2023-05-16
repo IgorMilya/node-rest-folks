@@ -5,7 +5,7 @@ import { categoriesValidateSchema } from './validationsSchema.js';
 import { CategoriesControllerCreate, CategoriesControllerGetAll, CategoriesControllerUpdate, CategoriesControllerDelete } from './CategoriesController.js';
 
 export const categoryRouter = new Router();
-export const categoriesDefaultPath = '/api/restaurant/categories';
+export const categoriesDefaultPath = '/api/categories';
 
 categoryRouter.post('/', validateSchema(categoriesValidateSchema), CategoriesControllerCreate);
 categoryRouter.get('/', CategoriesControllerGetAll);

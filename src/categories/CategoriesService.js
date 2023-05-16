@@ -1,17 +1,19 @@
-import { createCategory, findCategoryALL, findCategoryByIDandUpdate, findCategoryByIDandDelete, findOne } from './CategoriesDAL.js';
+import { createCategory, findCategoryALL, findCategoryByIDandUpdate, findCategoryByIDandDelete, findSubCategoryByCategory, findOne } from './CategoriesDAL.js';
 
 export const CategoriesServiceCreate = async category => {
     const createdCategory = await createCategory(category);
     return createdCategory;
 };
 
-export const CategoriesServiceGetAll = async () => {
-    const categories = await findCategoryALL();
-    return categories;
-};
+export const CategoriesServiceGetAll = async category => {
+    let categories = [];
+    if (!!category) {
+        const categoryID = await findOne(category, 'id');
+        categories = await findSubCategoryByCategory(categoryID);
+    } else {
+        categories = await findCategoryALL();
+    }
 
-export const CategoriesServiceGeOneByTitle = async category => {
-    const categories = await findOne(category);
     return categories;
 };
 

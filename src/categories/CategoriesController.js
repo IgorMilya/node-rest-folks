@@ -11,7 +11,9 @@ export const CategoriesControllerCreate = async (req, res) => {
 
 export const CategoriesControllerGetAll = async (req, res) => {
     try {
-        const categories = await CategoriesServiceGetAll();
+        const { category } = req.query;
+
+        const categories = await CategoriesServiceGetAll(category);
         return res.json(categories);
     } catch (e) {
         res.status(500).json(e.message);

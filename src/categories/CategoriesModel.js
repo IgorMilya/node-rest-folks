@@ -4,7 +4,15 @@ import { schemaOptions } from '../utils/schemaOptions.js';
 const Category = new mongoose.Schema(
     {
         title: { type: String, required: true, unique: true },
-        picture: { type: String, required: true },
+        picture: { type: String },
+        type: { type: String },
+        parent: { type: mongoose.Types.ObjectId, ref: 'Category' },
+        children: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'Category',
+            },
+        ],
     },
     schemaOptions
 );
