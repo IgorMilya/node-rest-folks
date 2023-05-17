@@ -8,7 +8,6 @@ export const DishesServiceCreate = async dish => {
 };
 
 export const DishesServiceGetAll = async ({ q, category, subcategory }) => {
-    console.log(await findOne(category, 'id'));
     const { _id: categoryID } = !!category && (await findOne(category, 'id'));
     const { _id: subcategoryID } = !!subcategory && (await findOne(subcategory, 'id'));
 

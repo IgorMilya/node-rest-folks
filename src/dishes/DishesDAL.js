@@ -1,14 +1,42 @@
 import DishDB from './DishesModel.js';
-import CategoryDB from '../categories/CategoriesModel.js';
 
 export const createDish = async dish => {
     return DishDB.create(dish);
 };
 
 export const findDishALL = async findValues => {
-    return await DishDB.aggregate([
+    return DishDB.aggregate([
         {
             $match: findValues,
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'categoryID',
+                foreignField: '_id',
+                as: 'categoryData',
+            },
+        },
+        {
+            $lookup: {
+                from: 'categories',
+                localField: 'subcategoryID',
+                foreignField: '_id',
+                as: 'subcategoryData',
+            },
+        },
+        {
+            $project: {
+                title: 1,
+                price: 1,
+                picture: 1,
+                description: 1,
+                category: { $arrayElemAt: ['$categoryData.title', 0] },
+                subcategory: { $arrayElemAt: ['$subcategoryData.title', 0] },
+                weight: 1,
+                bonus: 1,
+                additionalFood: 1,
+            },
         },
     ]);
 };

@@ -1,14 +1,16 @@
 ## categories
 
-#### example request http://localhost:5001/api/categories - GET ALL categories
+#### example request http://localhost:5001/api/categories - GET ALL categories, POST, PUT
 
-#### example request http://localhost:5001/api/categories?category=Drinks - GET ALL subcategories by categoryId
+#### example request http://localhost:5001/api/categories/6453fe613b229fb1d201d915 - DELETE 1 category by ID
+
+#### example request http://localhost:5001/api/categories?category=Drinks - GET ALL subcategories by category
 
 ## DISHES
 
 #### example request http://localhost:5001/api/dishes - GET - get all dishes
 
-##### example request http://localhost:5001/api/dishes?category=Drinks&q=USA - GET - get all dishes with query
+##### example request http://localhost:5001/api/dishes?category=Pizza&q=tomatoes&subcategory=Round_pizza - GET - get all dishes with query
 
 ##### allowed query: category, subcategory, q (search string)
 
@@ -26,7 +28,7 @@
 
 > ##### Get all tables info
 >
-> GET - http://localhost:5001/api/restaurant/tables
+> GET - http://localhost:5001/api/tables
 
 <details><summary>response example</summary>
 
@@ -75,7 +77,7 @@
 
 > ##### Get All free tables
 >
-> GET - http://localhost:5001/api/restaurant/tables/free
+> GET - http://localhost:5001/api/tables/free
 
 <details><summary>response example</summary>
 
@@ -110,7 +112,7 @@
 
 > ##### Get the reservation `time` for a specific table for the current date by `table id`
 >
-> GET - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
+> GET - http://localhost:5001/api/tables/reservation/6459612787a543d932c11031
 
 <details><summary>response example</summary>
 
@@ -134,11 +136,11 @@ or
 
 > ##### Change table `status` by `table id`
 >
-> PUT - http://localhost:5001/api/restaurant/tables/6459612787a543d932c11031
+> PUT - http://localhost:5001/api/tables/6459612787a543d932c11031
 
 > ##### Add new `table`
 >
-> POST - http://localhost:5001/api/restaurant/tables
+> POST - http://localhost:5001/api/tables
 
 <details><summary>body example</summary>
 
@@ -154,7 +156,7 @@ or
 
 > ##### Add `new reservation` info to the table by `table id`
 >
-> POST - http://localhost:5001/api/restaurant/tables/reservation/6459612787a543d932c11031
+> POST - http://localhost:5001/api/tables/reservation/6459612787a543d932c11031
 
 <details><summary>body example</summary>
 
@@ -175,11 +177,11 @@ or
 
 > ##### Delete `reservation` info from the table by `reservation id` and `table number`
 >
-> DELETE - http://localhost:5001/api/restaurant/tables/reservation/T-01/6459612787a543d932c11034
+> DELETE - http://localhost:5001/api/tables/reservation/T-01/6459612787a543d932c11034
 
 > ##### Delete `table` by `table id`
 >
-> DELETE - http://localhost:5001/api/restaurant/tables/6459612787a543d932c11031
+> DELETE - http://localhost:5001/api/tables/6459612787a543d932c11031
 
 ---
 
