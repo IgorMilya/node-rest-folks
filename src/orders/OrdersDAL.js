@@ -1,15 +1,24 @@
+import mongoose from 'mongoose';
 import OrderDB from './OrdersModel.js';
+import { getOrderDATA } from './utils.js';
 
 const create = async order => {
     return OrderDB.create(order);
 };
 
 const findAll = async () => {
-    return OrderDB.find();
+    return OrderDB.aggregate([...getOrderDATA]);
 };
 
 const findByID = async id => {
-    return OrderDB.findById(id);
+    const objectId = new mongoose.Types.ObjectId(id);
+
+    return OrderDB.aggregate([
+        {
+            $match: { _id: objectId },
+        },
+        ...getOrderDATA,
+    ]);
 };
 
 const update = async order => {

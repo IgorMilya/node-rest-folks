@@ -1,23 +1,7 @@
 import mongoose from 'mongoose';
 import { schemaOptionsWithTimestamp, schemaOptions } from '../utils/schemaOptions.js';
 
-const dishes = new mongoose.Schema(
-    {
-        title: { type: String, required: true },
-        price: { type: Number, required: true },
-        amount: { type: Number, required: true },
-    },
-    schemaOptions
-);
-
-const additionalFood = new mongoose.Schema(
-    {
-        title: { type: String, required: true },
-        price: { type: Number, required: true },
-        amount: { type: Number, required: true },
-    },
-    schemaOptions
-);
+const dishes = new mongoose.Schema({ dishID: { type: mongoose.Types.ObjectId, ref: 'Dish' }, price: Number, amount: { type: Number, required: true } }, schemaOptions);
 
 const deliveryDetails = new mongoose.Schema(
     {
@@ -46,7 +30,6 @@ export const Order = new mongoose.Schema(
         tip: tip,
         tableTitle: String,
         dishes: [dishes],
-        additionalFood: [additionalFood],
         deliveryDetails: deliveryDetails,
         email: String,
         description: String,
