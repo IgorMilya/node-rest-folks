@@ -1,21 +1,29 @@
 import OrderDB from './OrdersModel.js';
 
-export const createOrder = async order => {
+const create = async order => {
     return OrderDB.create(order);
 };
 
-export const getOrdersALL = async () => {
+const findAll = async () => {
     return OrderDB.find();
 };
 
-export const getOrderByID = async id => {
+const findByID = async id => {
     return OrderDB.findById(id);
 };
 
-export const getOrderByIDandUpdate = async order => {
+const update = async order => {
     return OrderDB.findByIdAndUpdate(order.id, order, { new: true });
 };
 
-export const getOrderByIDandDelete = async id => {
+const deleteOrder = async id => {
     return OrderDB.findByIdAndDelete(id);
+};
+
+export const OrderDAL = {
+    create,
+    findAll,
+    findByID,
+    update,
+    deleteOrder,
 };

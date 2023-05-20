@@ -7,12 +7,6 @@ const Category = new mongoose.Schema(
         picture: { type: String },
         type: { type: String },
         parent: { type: mongoose.Types.ObjectId, ref: 'Category' },
-        children: [
-            {
-                type: mongoose.Types.ObjectId,
-                ref: 'Category',
-            },
-        ],
     },
     schemaOptions
 );

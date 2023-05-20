@@ -1,42 +1,42 @@
-import { OrdersServiceCreate, OrdersServiceGetAll, OrdersServiceGetOne, OrdersServiceUpdate, OrdersServiceDelete } from './OrdersService.js';
+import { OrderService } from './OrdersService.js';
 
-export const OrdersControllerCreate = async (req, res) => {
+const create = async (req, res) => {
     try {
-        const order = await OrdersServiceCreate(req.body);
+        const order = await OrderService.create(req.body);
         res.json(order);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
 
-export const OrdersControllerGetAll = async (req, res) => {
+const getAll = async (req, res) => {
     try {
-        const orders = await OrdersServiceGetAll();
+        const orders = await OrderService.getAll();
         return res.json(orders);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
-export const OrdersControllerGetOne = async (req, res) => {
+const getOne = async (req, res) => {
     try {
-        const order = await OrdersServiceGetOne(req.params.id);
+        const order = await OrderService.getOne(req.params.id);
         return res.json(order);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
 
-export const OrdersControllerUpdate = async (req, res) => {
+const update = async (req, res) => {
     try {
-        const updateOrder = await OrdersServiceUpdate(req.body);
+        const updateOrder = await OrderService.update(req.body);
         return res.json(updateOrder);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
-export const OrdersControllerDelete = async (req, res) => {
+const deleteOrder = async (req, res) => {
     try {
-        const order = await OrdersServiceDelete(req.params.id);
+        const order = await OrderService.deleteOrder(req.params.id);
 
         if (!order) {
             res.status(404).json('ID was not founded or already deleted');
@@ -46,4 +46,12 @@ export const OrdersControllerDelete = async (req, res) => {
     } catch (e) {
         res.status(500).json(e.message);
     }
+};
+
+export const OrderController = {
+    create,
+    getAll,
+    getOne,
+    update,
+    deleteOrder,
 };

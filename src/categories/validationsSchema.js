@@ -5,5 +5,4 @@ export const categoriesValidateSchema = Joi.object({
     picture: Joi.string(),
     type: Joi.string().min(5),
     parent: Joi.string().min(3),
-    children: Joi.array(),
 });

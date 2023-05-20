@@ -1,35 +1,43 @@
-import { createOrder, getOrdersALL, getOrderByID, getOrderByIDandUpdate, getOrderByIDandDelete } from './OrdersDAL.js';
+import { OrderDAL } from './OrdersDAL.js';
 
-export const OrdersServiceCreate = async order => {
-    const createdOrder = await createOrder(order);
+const create = async order => {
+    const createdOrder = await OrderDAL.create(order);
     return createdOrder;
 };
 
-export const OrdersServiceGetAll = async () => {
-    const orders = await getOrdersALL();
+const getAll = async () => {
+    const orders = await OrderDAL.findAll();
     return orders;
 };
-export const OrdersServiceGetOne = async id => {
+const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const order = await getOrderByID(id);
+    const order = await OrderDAL.findByID(id);
     return order;
 };
 
-export const OrdersServiceUpdate = async order => {
+const update = async order => {
     if (!order.id) {
         throw new Error('ID was not set');
     }
-    const updateOrder = await getOrderByIDandUpdate(order);
+    const updateOrder = await OrderDAL.update(order);
     return updateOrder;
 };
 
-export const OrdersServiceDelete = async id => {
+const deleteOrder = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const order = await getOrderByIDandDelete(id);
+    const order = await OrderDAL.deleteOrder(id);
 
     return order;
+};
+
+export const OrderService = {
+    create,
+    getAll,
+    getOne,
+    update,
+    deleteOrder,
 };

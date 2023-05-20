@@ -1,25 +1,34 @@
 import CategoryDB from './CategoriesModel.js';
 
-export const createCategory = async category => {
+const create = async category => {
     return CategoryDB.create(category);
 };
 
-export const findCategoryALL = async () => {
+const findAll = async () => {
     return CategoryDB.find({ type: 'category' }, { title: 1, picture: 1 });
 };
 
-export const findSubCategoryByCategory = async parentId => {
+const findSubCategoryByCategory = async parentId => {
     return CategoryDB.find({ parent: parentId }, 'title');
 };
 
-export const findOne = async (category, field) => {
+const findOne = async (category, field) => {
     return CategoryDB.findOne({ title: category }, field);
 };
 
-export const findCategoryByIDandUpdate = async category => {
+const update = async category => {
     return CategoryDB.findByIdAndUpdate(category.id, category, { new: true });
 };
 
-export const findCategoryByIDandDelete = async id => {
+const deleteCategory = async id => {
     return CategoryDB.findByIdAndDelete(id);
+};
+
+export const CategoryDAL = {
+    create,
+    findAll,
+    findSubCategoryByCategory,
+    findOne,
+    update,
+    deleteCategory,
 };

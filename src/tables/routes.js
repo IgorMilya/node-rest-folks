@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as controllers from './controllers.js';
+import { controllers } from './controllers.js';
 
 export const tablesRouter = new Router();
 export const tablesDefaultPath = '/api/tables';

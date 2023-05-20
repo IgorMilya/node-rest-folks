@@ -29,20 +29,27 @@ const deliveryDetails = new mongoose.Schema(
     schemaOptions
 );
 
+const tip = new mongoose.Schema(
+    {
+        amount: { type: Number, required: true },
+        type: { type: String, required: true },
+    },
+    schemaOptions
+);
 export const Order = new mongoose.Schema(
     {
-        status: { type: Boolean, required: true },
+        status: { type: String, required: true },
         diningOptions: { type: String, required: true },
         orderNumber: { type: String, required: true },
         totalPrice: { type: Number, required: true },
         paymentMethod: { type: String, required: true },
-        tipAmount: Number,
+        tip: tip,
         tableTitle: String,
         dishes: [dishes],
         additionalFood: [additionalFood],
         deliveryDetails: deliveryDetails,
         email: String,
-        notes: String,
+        description: String,
     },
     schemaOptionsWithTimestamp
 );

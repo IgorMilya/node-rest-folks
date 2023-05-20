@@ -1,34 +1,41 @@
-import { createCategory, findCategoryALL, findCategoryByIDandUpdate, findCategoryByIDandDelete, findSubCategoryByCategory, findOne } from './CategoriesDAL.js';
+import { CategoryDAL } from './CategoriesDAL.js';
 
-export const CategoriesServiceCreate = async category => {
-    const createdCategory = await createCategory(category);
+const create = async category => {
+    const createdCategory = await CategoryDAL.create(category);
     return createdCategory;
 };
 
-export const CategoriesServiceGetAll = async category => {
+const getAll = async category => {
     let categories = [];
     if (!!category) {
-        const categoryID = await findOne(category, 'id');
-        categories = await findSubCategoryByCategory(categoryID);
+        const categoryID = await CategoryDAL.findOne(category, 'id');
+        categories = await CategoryDAL.findSubCategoryByCategory(categoryID);
     } else {
-        categories = await findCategoryALL();
+        categories = await CategoryDAL.findAll();
     }
 
     return categories;
 };
 
-export const CategoriesServiceUpdate = async category => {
+const update = async category => {
     if (!category.id) {
         throw new Error('ID was not set');
     }
-    const updatedCategory = await findCategoryByIDandUpdate(category);
+    const updatedCategory = await CategoryDAL.update(category);
     return updatedCategory;
 };
 
-export const CategoriesServiceDelete = async id => {
+const deleteCategory = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const category = await findCategoryByIDandDelete(id);
+    const category = await CategoryDAL.deleteCategory(id);
     return category;
+};
+
+export const CategoriesService = {
+    create,
+    getAll,
+    update,
+    deleteCategory,
 };

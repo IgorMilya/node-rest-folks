@@ -1,54 +1,43 @@
+import mongoose from 'mongoose';
 import DishDB from './DishesModel.js';
+import { getDishDATA } from './utils.js';
 
-export const createDish = async dish => {
+const create = async dish => {
     return DishDB.create(dish);
 };
 
-export const findDishALL = async findValues => {
+const findAll = async findValues => {
     return DishDB.aggregate([
         {
             $match: findValues,
         },
-        {
-            $lookup: {
-                from: 'categories',
-                localField: 'categoryID',
-                foreignField: '_id',
-                as: 'categoryData',
-            },
-        },
-        {
-            $lookup: {
-                from: 'categories',
-                localField: 'subcategoryID',
-                foreignField: '_id',
-                as: 'subcategoryData',
-            },
-        },
-        {
-            $project: {
-                title: 1,
-                price: 1,
-                picture: 1,
-                description: 1,
-                category: { $arrayElemAt: ['$categoryData.title', 0] },
-                subcategory: { $arrayElemAt: ['$subcategoryData.title', 0] },
-                weight: 1,
-                bonus: 1,
-                additionalFood: 1,
-            },
-        },
+        ...getDishDATA,
     ]);
 };
 
-export const findDisByID = async id => {
-    return DishDB.findById(id);
+const findByID = async id => {
+    const objectId = new mongoose.Types.ObjectId(id);
+
+    return DishDB.aggregate([
+        {
+            $match: { _id: objectId },
+        },
+        ...getDishDATA,
+    ]);
 };
 
-export const findDisByIDandUpdate = async dish => {
+const update = async dish => {
     return DishDB.findByIdAndUpdate(dish.id, dish, { new: true });
 };
 
-export const findDisByIDandDelete = async id => {
+const deleteDish = async id => {
     return DishDB.findByIdAndDelete(id);
+};
+
+export const DishesDAL = {
+    create,
+    findAll,
+    findByID,
+    update,
+    deleteDish,
 };

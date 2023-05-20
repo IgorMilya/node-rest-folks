@@ -1,47 +1,56 @@
-import { createDish, findDishALL, findDisByID, findDisByIDandUpdate, findDisByIDandDelete } from './DishesDAL.js';
+import { DishesDAL } from './DishesDAL.js';
 
-import { findOne } from '../categories/CategoriesDAL.js';
+import { CategoryDAL } from '../categories/CategoriesDAL.js';
 
-export const DishesServiceCreate = async dish => {
-    const createdDish = await createDish(dish);
+const create = async dish => {
+    const createdDish = await DishesDAL.create(dish);
     return createdDish;
 };
 
-export const DishesServiceGetAll = async ({ q, category, subcategory }) => {
-    const { _id: categoryID } = !!category && (await findOne(category, 'id'));
-    const { _id: subcategoryID } = !!subcategory && (await findOne(subcategory, 'id'));
+const getAll = async ({ q, category, subcategory }) => {
+    const { _id: categoryID } = !!category && (await CategoryDAL.findOne(category, 'id'));
+    const { _id: subcategoryID } = !!subcategory && (await CategoryDAL.findOne(subcategory, 'id'));
 
     const findValues = {
+        type: 'dish',
         ...(!!q && { $or: [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }] }),
         ...(!!category && { categoryID }),
         ...(!!subcategory && { subcategoryID }),
     };
 
-    const dishes = await findDishALL(findValues);
+    const dishes = await DishesDAL.findAll(findValues);
 
     return dishes;
 };
 
-export const DishesServiceGetOne = async id => {
+const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const dish = await findDisByID(id);
+    const dish = await DishesDAL.findByID(id);
     return dish;
 };
 
-export const DishesServiceUpdate = async dish => {
+const update = async dish => {
     if (!dish.id) {
         throw new Error('ID was not set');
     }
-    const updatedDish = await findDisByIDandUpdate(dish);
+    const updatedDish = await DishesDAL.update(dish);
     return updatedDish;
 };
 
-export const DishesServiceDelete = async id => {
+const deleteDish = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const dish = await findDisByIDandDelete(id);
+    const dish = await DishesDAL.deleteDish(id);
     return dish;
+};
+
+export const DishesService = {
+    create,
+    getAll,
+    getOne,
+    update,
+    deleteDish,
 };

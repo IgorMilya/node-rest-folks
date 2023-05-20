@@ -1,13 +1,19 @@
 import Joi from 'joi';
 
 export const ordersValidateSchema = Joi.object({
-    status: Joi.boolean().required(),
+    status: Joi.string()
+        .required()
+        .pattern(/^opened|delivering|completed$/),
     diningOptions: Joi.string().required(),
     orderNumber: Joi.string().required(),
     totalPrice: Joi.number().required().min(50),
     paymentMethod: Joi.string().required().min(3),
-    tipAmount: Joi.number().positive(),
-    tableTitle: Joi.string().min(3),
+    tip: Joi.object({
+        amount: Joi.number().positive().required(),
+        type: Joi.string()
+            .required()
+            .pattern(/^percentage|fixed$/),
+    }),
     dishes: Joi.array().items(
         Joi.object({
             title: Joi.string().required().min(3),
@@ -29,5 +35,5 @@ export const ordersValidateSchema = Joi.object({
         email: Joi.string().email(),
     }),
     email: Joi.string().email(),
-    notes: Joi.string().min(5),
+    description: Joi.string().min(5),
 });
