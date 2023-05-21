@@ -12,6 +12,8 @@
 
 ##### example request http://localhost:5001/api/dishes?category=Pizza&q=tomatoes&subcategory=Round_pizza - GET - get all dishes with query
 
+##### example request http://localhost:5001/api/dishes?subcategory=Juice,Wine - GET - get all dishes with query
+
 ##### allowed query: category, subcategory, q (search string)
 
 #### example request http://localhost:5001/api/dishes - POST - create 1 dish /
