@@ -6,7 +6,6 @@ export const ordersValidateSchema = Joi.object({
         .pattern(/^opened|delivering|completed$/),
     diningOptions: Joi.string().required(),
     orderNumber: Joi.string().required(),
-    totalPrice: Joi.number().required().min(50),
     paymentMethod: Joi.string().required().min(3),
     tip: Joi.object({
         amount: Joi.number().positive().required(),
@@ -17,7 +16,6 @@ export const ordersValidateSchema = Joi.object({
     dishes: Joi.array().items(
         Joi.object({
             dishID: Joi.string().required().min(3),
-            price: Joi.number().min(1),
             amount: Joi.number().required().integer().positive(),
         })
     ),
