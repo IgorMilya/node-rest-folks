@@ -23,10 +23,7 @@ const getAll = async ({ q, category, subcategory }) => {
     }
 
     const findValues = {
-        type: 'dish',
-        ...(!!q && { $or: [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }] }),
-        ...(!!category && { categoryID }),
-        ...(!!subcategory && { $or: subcategoryArr }),
+        $and: [{ type: 'dish' }, !!q && { $or: [{ title: new RegExp(q, 'i') }, { description: new RegExp(q, 'i') }] }, !!category && { categoryID }, !!subcategory && { $or: subcategoryArr }],
     };
 
     const dishes = await DishesDAL.findAll(findValues);
