@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(resolve(process.cwd(), 'static')));
 
-app.get("/static/:dirName/:fileName", (req, res) => {
+app.get("/:api/:dirName/:fileName", (req, res) => {
     const { dirName, fileName } = req.params;
     const filePath = path.join(process.cwd(), 'static', dirName, fileName);
     res.sendFile(filePath);
