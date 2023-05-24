@@ -191,6 +191,8 @@ or
 
 #### example request http://localhost:5001/api/orders - GET - get all orders
 
+##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
+
 #### example request http://localhost:5001/api/orders/645e2c4a66bbb2ae16af76e3 - GET - get one order by id
 
 #### example request http://localhost:5001/api/orders - POST - create one order
