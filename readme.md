@@ -197,6 +197,27 @@ or
 
 #### example request http://localhost:5001/api/orders - POST - create one order
 
+    {
+        "orderType": "delivery",
+                "orderNumber": "test",
+
+        "dishes":   [
+        {
+            "dishID": "645a8c14bdac7211baf9aa07",
+            "amount": 2
+
+        },
+        {
+            "dishID": "645a8c14bdac7211baf9aa1f",
+            "amount": 1
+
+        }
+    ],
+        "description": "fffffffffff",
+        "table": "T-05"
+
+    }
+
 #### example request http://localhost:5001/api/orders - PUT - update one order
 
 #### example request http://localhost:5001/api/orders/645e2c4a66bbb2ae16af76e3 - DELETE - get one order by id

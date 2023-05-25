@@ -6,13 +6,14 @@ const create = async order => {
     return OrderDB.create(order);
 };
 
-const findAll = async () => {
-    return OrderDB.aggregate([...getOrderDATA]);
+const findAll = async findValue => {
+    console.log(findValue);
+    return OrderDB.aggregate([{ $match: findValue }, ...getOrderDATA]);
 };
 
 const findByID = async id => {
     const objectId = new mongoose.Types.ObjectId(id);
-    console.log(objectId);
+
     return OrderDB.aggregate([
         {
             $match: { _id: objectId },

@@ -12,7 +12,7 @@ const create = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         const { q, category, subcategory } = req.query;
-        console.log(req.query)
+
         const dishes = await DishesService.getAll({ q, category, subcategory });
         return res.json(dishes);
     } catch (e) {

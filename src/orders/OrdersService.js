@@ -5,10 +5,17 @@ const create = async order => {
     return createdOrder;
 };
 
-const getAll = async () => {
-    const orders = await OrderDAL.findAll();
+const getAll = async type => {
+    let findValue = [];
+
+    if (!!type) {
+        type.split(',').map(item => findValue.push({ orderType: item }));
+    }
+    const orders = await OrderDAL.findAll({ $or: findValue });
+
     return orders;
 };
+
 const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');

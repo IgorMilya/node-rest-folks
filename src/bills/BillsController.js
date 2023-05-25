@@ -1,9 +1,9 @@
-import { OrderService } from './OrdersService.js';
+import { BillsService } from './BillsService.js';
 
 const create = async (req, res) => {
     try {
-        const order = await OrderService.create(req.body);
-        res.json(order);
+        const bill = await BillsService.create(req.body);
+        res.json(bill);
     } catch (e) {
         res.status(500).json(e.message);
     }
@@ -11,17 +11,16 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const { type } = req.query;
-        const orders = await OrderService.getAll(type);
-        return res.json(orders);
+        const bills = await BillsService.getAll();
+        return res.json(bills);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
 const getOne = async (req, res) => {
     try {
-        const order = await OrderService.getOne(req.params.id);
-        return res.json(order);
+        const bill = await BillsService.getOne(req.params.id);
+        return res.json(bill);
     } catch (e) {
         res.status(500).json(e.message);
     }
@@ -29,30 +28,30 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const updateOrder = await OrderService.update(req.body);
-        return res.json(updateOrder);
+        const updateBill = await BillsService.update(req.body);
+        return res.json(updateBill);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
-const deleteOrder = async (req, res) => {
+const deleteBill = async (req, res) => {
     try {
-        const order = await OrderService.deleteOrder(req.params.id);
+        const bill = await BillsService.deleteBill(req.params.id);
 
-        if (!order) {
+        if (!bill) {
             res.status(404).json('ID was not founded or already deleted');
         } else {
-            return res.json(order);
+            return res.json(bill);
         }
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
 
-export const OrderController = {
+export const BillsController = {
     create,
     getAll,
     getOne,
     update,
-    deleteOrder,
+    deleteBill,
 };
