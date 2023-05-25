@@ -11,7 +11,7 @@ export const billsValidateSchema = Joi.object({
     status: Joi.string()
         .required()
         .pattern(/^opened|closed$/),
-    totalPrice: Joi.number().positive(),
+    totalPrice: Joi.number().required().positive(),
     tip: Joi.number().positive(),
     email: Joi.string().email(),
     paymentMethod: Joi.string(),

@@ -225,3 +225,39 @@ or
 #### example request http://localhost:5001/api/orders/645e2c4a66bbb2ae16af76e3 - DELETE - get one order by id
 
 ---
+
+## BILLS
+
+#### example request http://localhost:5001/api/bills - GET - get all bills
+
+#### allowed query: type, status -- http://localhost:5001/api/bills/?type=delivery,dine-in&status=opened
+
+##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
+
+##### status pattern(/^opened|closed$/)
+
+#### example request http://localhost:5001/api/bills/646fb293a608de2216974150- GET - get one bill by id
+
+#### example request http://localhost:5001/api/bills - POST - create one bill
+
+    {
+        "orderType": "takeaway",
+        "orderNumber": "12",
+        "orderID": "646fab97ecbd93be533d240b",
+        "table": "T-9",
+        "dishes": [
+            {
+                "dishID": "646e6c0fcb7e030760ff7908",
+                "title": "ffff",
+                "price": 120,
+                "amount": 4
+            }
+        ],
+        "description": "aasda",
+        "totalPrice": 125,
+        "status": "closed"
+    }
+
+#### example request http://localhost:5001/api/bills - PUT - update one bill
+
+#### example request http://localhost:5001/api/bills/645e2c4a66bbb2ae16af76e3 - DELETE - get one bill by id

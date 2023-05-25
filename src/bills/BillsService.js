@@ -1,12 +1,27 @@
 import { BillsDAL } from './BillsDAL.js';
+import { OrderDAL } from '../orders/OrdersDAL.js';
 
 const create = async bill => {
-    const createdBill = await BillsDAL.create(bill);
+    const noOrderID = ({ orderID, ...rest }) => rest;
+
+    OrderDAL.deleteOrder(bill.orderID);
+
+    const createdBill = await BillsDAL.create(noOrderID(bill));
     return createdBill;
 };
 
-const getAll = async () => {
-    const bills = await BillsDAL.findAll();
+const getAll = async ({ type, status }) => {
+    let findType = {};
+
+    if (!!type) {
+        const arr = [];
+        type.split(',').map(item => arr.push({ orderType: item }));
+        findType = { $or: arr };
+    }
+
+    const findValue = { $and: [findType, !!status ? { status } : {}] };
+
+    const bills = await BillsDAL.findAll(findValue);
     return bills;
 };
 

@@ -6,13 +6,15 @@ const create = async order => {
 };
 
 const getAll = async type => {
-    let findValue = [];
+    let findValue = {};
 
     if (!!type) {
-        type.split(',').map(item => findValue.push({ orderType: item }));
+        const arr = [];
+        type.split(',').map(item => arr.push({ orderType: item }));
+        findValue = { $or: arr };
     }
-    const orders = await OrderDAL.findAll({ $or: findValue });
 
+    const orders = await OrderDAL.findAll(findValue);
     return orders;
 };
 

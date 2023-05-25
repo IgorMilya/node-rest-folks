@@ -1,17 +1,14 @@
-import mongoose from 'mongoose';
 import BillDB from './BillsModel.js';
 
 const create = async bill => {
     return BillDB.create(bill);
 };
 
-const findAll = async () => {
-    return BillDB.find();
+const findAll = async findValue => {
+    return BillDB.find(findValue);
 };
 
 const findByID = async id => {
-    const orderID = new mongoose.Types.ObjectId(id);
-
     return BillDB.findById(id);
 };
 

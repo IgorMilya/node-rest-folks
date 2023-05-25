@@ -11,12 +11,15 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const bills = await BillsService.getAll();
+        const { type, status } = req.query;
+
+        const bills = await BillsService.getAll({ type, status });
         return res.json(bills);
     } catch (e) {
         res.status(500).json(e.message);
     }
 };
+
 const getOne = async (req, res) => {
     try {
         const bill = await BillsService.getOne(req.params.id);

@@ -6,7 +6,7 @@ const dishes = new mongoose.Schema({ dishID: { type: mongoose.Types.ObjectId, re
 export const Order = new mongoose.Schema(
     {
         orderType: { type: String, required: true },
-        orderNumber: { type: String, required: true },
+        orderNumber: { type: String, required: true, unique: true },
         table: String,
         dishes: [dishes],
         description: String,
