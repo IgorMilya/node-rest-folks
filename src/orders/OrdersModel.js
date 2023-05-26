@@ -1,24 +1,25 @@
-import mongoose from 'mongoose'
-import { schemaOptionsWithTimestamp, schemaOptions } from '../utils/schemaOptions.js'
+import mongoose from 'mongoose';
+import { schemaOptionsWithTimestamp, schemaOptions } from '../utils/schemaOptions.js';
 
 const dishes = new mongoose.Schema(
-  {
-    dishID: { type: mongoose.Types.ObjectId, ref: 'Dish' },
-    amount: { type: Number, required: true },
-    totalPrice: { type: Number },
-  },
-  schemaOptions,
-)
+    {
+        dishID: { type: mongoose.Types.ObjectId, ref: 'Dish' },
+        amount: { type: Number, required: true },
+        dishTotalPrice: { type: Number },
+    },
+    schemaOptions
+);
 
 export const Order = new mongoose.Schema(
-  {
-    orderType: { type: String, required: true },
-    orderNumber: { type: Number, required: true, unique: true },
-    table: String,
-    dishes: [dishes],
-    description: String,
-  },
-  schemaOptionsWithTimestamp,
-)
+    {
+        orderType: { type: String, required: true },
+        orderNumber: { type: Number, required: true, unique: true },
+        table: String,
+        dishes: [dishes],
+        description: String,
+        totalPrice: Number,
+    },
+    schemaOptionsWithTimestamp
+);
 
-export default mongoose.model('OrderDB', Order, 'orders')
+export default mongoose.model('OrderDB', Order, 'orders');
