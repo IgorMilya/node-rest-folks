@@ -3,7 +3,7 @@ import Joi from 'joi'
 export const ordersValidateSchema = Joi.object({
   orderType: Joi.string()
     .required()
-    .pattern(/^Take Away|Delivery|Dine In$/),
+    .pattern(/^takeAway|delivery|dineIn$/),
   orderNumber: Joi.number().required(),
   table: Joi.string(),
 
