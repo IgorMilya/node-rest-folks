@@ -1,71 +1,80 @@
-import { dataAccess } from './dataAccess.js'
-import { getCurrentDate } from '../utils/currentDate.js'
+import { dataAccess } from "./dataAccess.js";
+import { getCurrentDate } from "../utils/currentDate.js";
 
 const getAllTables = async () => {
-  return await dataAccess.getAllTables()
-}
+  return await dataAccess.getAllTables();
+};
 
 const getFreeTables = async () => {
-  const allTables = await dataAccess.getAllTables()
+  const allTables = await dataAccess.getAllTables();
 
-  return allTables.filter(({ reserved }) => !reserved).map(({ number, id }) => ({ number, id }))
-}
+  return allTables
+    .filter(({ reserved }) => !reserved)
+    .map(({ number, id }) => ({ number, id }));
+};
 
-export const getTableReservationInfo = async tableNumber => {
-  const currentDate = getCurrentDate()
-  const { number, reservationInfo } = await dataAccess.getTableByName(tableNumber)
+export const getTableReservationInfo = async (tableNumber) => {
+  const currentDate = getCurrentDate();
+  const { number, reservationInfo } = await dataAccess.getTableByName(
+    tableNumber
+  );
 
   const tableReservations = reservationInfo
     .filter(({ date }) => date === currentDate)
-    .map(({ time }) => time)
+    .map(({ time }) => time);
 
   if (tableReservations.length) {
     return {
       message: `Table ${number} is currently reserved for the following hours:`,
       tableReservations,
-    }
+    };
   } else {
-    return { message: 'No reservations for this table', tableReservations }
+    return { message: "No reservations for this table", tableReservations };
   }
-}
+};
 
 const getReservationBySelectedDate = async (id, date) => {
-  const { reservationInfo } = await dataAccess.getTable(id)
+  const { reservationInfo } = await dataAccess.getTable(id);
 
-  return reservationInfo.filter(item => item.date === date)
-}
+  return reservationInfo.filter((item) => item.date === date);
+};
 
-const addNewTable = async body => {
-  return await dataAccess.addNewTable(body)
-}
+const addNewTable = async (body) => {
+  return await dataAccess.addNewTable(body);
+};
 
-const changeTableStatus = async tableNumber => {
-  const { id, reserved } = await dataAccess.getTableByName(tableNumber)
-  return await dataAccess.updateTableInfo(id, { reserved: !reserved })
-}
+const changeTableStatus = async (tableNumber) => {
+  const { id, reserved } = await dataAccess.getTableByName(tableNumber);
+  return await dataAccess.updateTableInfo(id, { reserved: !reserved });
+};
 
-const deleteTable = async id => {
-  return await dataAccess.deleteTableDataAccess(id)
-}
+const deleteTable = async (id) => {
+  return await dataAccess.deleteTableDataAccess(id);
+};
 
 const addNewReservation = async (id, reservation) => {
-  const updateOptions = { $push: { reservationInfo: reservation } }
+  const updateOptions = { $push: { reservationInfo: reservation } };
 
-  return await dataAccess.updateTableInfo(id, updateOptions)
-}
+  return await dataAccess.updateTableInfo(id, updateOptions);
+};
 
 const removeReservation = async (tableNumber, reservationID) => {
-  const removeOptions = { $pull: { reservationInfo: { _id: reservationID } } }
+  const removeOptions = { $pull: { reservationInfo: { _id: reservationID } } };
 
-  return await dataAccess.removeReservation({ number: tableNumber }, removeOptions)
-}
+  return await dataAccess.removeReservation(
+    { number: tableNumber },
+    removeOptions
+  );
+};
 
 const updateReservation = async (id, data) => {
-  const { reservationInfo } = await dataAccess.getTable(id)
-  const updatedInfo = reservationInfo.map(item => (item.id === data.id ? data : item))
+  const { reservationInfo } = await dataAccess.getTable(id);
+  const updatedInfo = reservationInfo.map((item) =>
+    item.id === data.id ? data : item
+  );
 
-  return await dataAccess.updateTableInfo(id, { reservationInfo: updatedInfo })
-}
+  return await dataAccess.updateTableInfo(id, { reservationInfo: updatedInfo });
+};
 
 export const services = {
   getAllTables,
@@ -78,4 +87,4 @@ export const services = {
   addNewReservation,
   removeReservation,
   updateReservation,
-}
+};
