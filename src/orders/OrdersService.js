@@ -22,7 +22,7 @@ const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const order = await OrderDAL.findByID(id);
+    const [order] = await OrderDAL.findByID(id);
     return order;
 };
 
