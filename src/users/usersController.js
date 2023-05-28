@@ -14,6 +14,7 @@ const update = async (req, res) => {
     const data = await UserService.update({
       id: req.params.userId,
       updateData: req.body,
+      picture: req.picture,
     });
 
     res.json(data);
@@ -31,7 +32,7 @@ const registration = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -46,7 +47,7 @@ const login = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -73,7 +74,7 @@ const refresh = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }

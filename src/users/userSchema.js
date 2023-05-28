@@ -19,6 +19,9 @@ export const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phoneNumber: {
+      type: String,
+    },
     userImage: {
       type: String,
       default:

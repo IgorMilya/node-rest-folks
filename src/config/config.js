@@ -1,6 +1,16 @@
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
-dotenv.config()
+dotenv.config();
 
-export const { DB_URL, PORT } = process.env
-export const connectionOptions = { useUnifiedTopology: true, useNewUrlParser: true }
+export const { DB_URL, PORT } = process.env;
+export const connectionOptions = {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+};
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
