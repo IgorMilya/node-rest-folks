@@ -32,7 +32,7 @@ const registration = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -47,7 +47,7 @@ const login = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }
@@ -74,7 +74,7 @@ const refresh = async (req, res) => {
       httpOnly: true,
     });
 
-    res.json(data);
+    res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
   }
