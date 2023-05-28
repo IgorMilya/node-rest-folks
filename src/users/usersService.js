@@ -8,9 +8,13 @@ const getAll = async () => {
   return UserDAL.findAll();
 };
 
-const update = async ({ id, updateData }) => {
+const update = async ({ id, updateData, picture }) => {
   if (updateData?.password) {
     updateData.password = await bcrypt.hash(updateData.password, 3);
+  }
+
+  if (picture) {
+    updateData.userImage = picture;
   }
 
   await UserDAL.update({ id, updateData });

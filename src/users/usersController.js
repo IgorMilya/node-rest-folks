@@ -14,6 +14,7 @@ const update = async (req, res) => {
     const data = await UserService.update({
       id: req.params.userId,
       updateData: req.body,
+      picture: req.picture,
     });
 
     res.json(data);
