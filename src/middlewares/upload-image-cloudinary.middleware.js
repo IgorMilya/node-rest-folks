@@ -1,5 +1,6 @@
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
+import { unlinkSync } from "fs";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,6 +29,7 @@ export const uploadImageCloudinaryMiddleware = (req, res, next) => {
           .status(500)
           .json({ error: "Error downloading the file on Cloudinary" });
       }
+      unlinkSync(req.file.path);
 
       req.picture = result.secure_url;
       next();
