@@ -46,7 +46,6 @@ const login = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-
     res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
     res.status(500).json(err.message);
@@ -73,6 +72,7 @@ const refresh = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
+    console.log(data);
 
     res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {

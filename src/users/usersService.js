@@ -100,7 +100,7 @@ const refresh = async ({ refreshToken }) => {
     refreshToken: tokens.refreshToken,
   });
 
-  return { ...tokens, userData };
+  return { ...tokens, data: userData };
 };
 
 export const UserService = {
