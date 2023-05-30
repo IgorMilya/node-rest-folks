@@ -9,6 +9,7 @@ export const billsRouter = new Router();
 export const billsDefaultPath = '/api/bills';
 
 billsRouter.post('/', validateSchema(billsValidateSchema), BillsController.create);
+billsRouter.get('/send/:id', BillsController.sendBill);
 billsRouter.get('/', BillsController.getAll);
 billsRouter.get('/:id', BillsController.getOne);
 billsRouter.put('/', BillsController.update);

@@ -13,6 +13,7 @@ const dishes = new mongoose.Schema(
 export const Order = new mongoose.Schema(
     {
         orderType: { type: String, required: true },
+        status: { type: String, default: 'opened' },
         orderNumber: { type: Number, required: true, unique: true },
         table: String,
         dishes: [dishes],

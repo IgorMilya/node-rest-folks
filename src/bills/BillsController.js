@@ -37,6 +37,7 @@ const update = async (req, res) => {
         res.status(500).json(e.message);
     }
 };
+
 const deleteBill = async (req, res) => {
     try {
         const bill = await BillsService.deleteBill(req.params.id);
@@ -51,10 +52,20 @@ const deleteBill = async (req, res) => {
     }
 };
 
+const sendBill = async (req, res) => {
+    try {
+        const email = await BillsService.sendBill(req.params.id);
+        return res.json(`bill to ${email} was sent`);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+};
+
 export const BillsController = {
     create,
     getAll,
     getOne,
     update,
     deleteBill,
+    sendBill,
 };

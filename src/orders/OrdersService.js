@@ -11,7 +11,7 @@ const getAll = async type => {
     if (!!type) {
         const arr = [];
         type.split(',').map(item => arr.push({ orderType: item }));
-        findValue = { $or: arr };
+        findValue = { $and: [{ status: 'opened' }, { $or: arr }] };
     }
 
     const orders = await OrderDAL.findAll(findValue);

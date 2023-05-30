@@ -2,12 +2,6 @@ import Joi from 'joi';
 
 export const billsValidateSchema = Joi.object({
     orderID: Joi.string().required(),
-    orderType: Joi.string()
-        .required()
-        .pattern(/^takeAway|delivery|dineIn$/),
-    orderNumber: Joi.number().required(),
-    table: Joi.string(),
-    description: Joi.string(),
     status: Joi.string().pattern(/^opened|closed$/),
     totalPrice: Joi.number().required().positive(),
     tip: Joi.number().positive(),

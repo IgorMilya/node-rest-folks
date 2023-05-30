@@ -1,12 +1,11 @@
 import { BillsDAL } from './BillsDAL.js';
 import { OrderDAL } from '../orders/OrdersDAL.js';
+import { sendEmail } from '../mail/MailServise.js';
 
 const create = async bill => {
-    const noOrderID = ({ orderID, ...rest }) => rest;
+    OrderDAL.updateStatus(bill.orderID);
 
-    OrderDAL.deleteOrder(bill.orderID);
-
-    const createdBill = await BillsDAL.create(noOrderID(bill));
+    const createdBill = await BillsDAL.create(bill);
     return createdBill;
 };
 
@@ -29,7 +28,7 @@ const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const bill = await BillsDAL.findByID(id);
+    const [bill] = await BillsDAL.findByID(id);
     return bill;
 };
 
@@ -50,10 +49,22 @@ const deleteBill = async id => {
     return bill;
 };
 
+const sendBill = async id => {
+    if (!id) {
+        throw new Error('ID was not set');
+    }
+    const email = await BillsDAL.findEmail(id);
+
+    sendEmail(email);
+
+    return email;
+};
+
 export const BillsService = {
     create,
     getAll,
     getOne,
     update,
     deleteBill,
+    sendBill,
 };

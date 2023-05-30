@@ -13,7 +13,6 @@ export const getOrderDATA = [
     {
         $addFields: {
             dishes: {
-                id: '$_id',
                 title: { $arrayElemAt: ['$dishesDetails.title', 0] },
                 price: { $arrayElemAt: ['$dishesDetails.price', 0] },
                 picture: { $arrayElemAt: ['$dishesDetails.picture', 0] },
