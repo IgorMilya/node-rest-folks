@@ -5,14 +5,14 @@ const create = async order => {
     return createdOrder;
 };
 
-const getAll = async type => {
-    let findValue = {};
-
-    if (!!type) {
-        const arr = [];
-        type.split(',').map(item => arr.push({ orderType: item }));
-        findValue = { $and: [{ status: 'opened' }, { $or: arr }] };
+const getAll = async query => {
+    if (query.orderType) {
+        query.orderType = { $in: query.orderType?.split(',') };
     }
+
+    const { page, limit, ...paramsQuery } = query;
+
+    const findValue = { $and: [paramsQuery, { status: 'opened' }] };
 
     const orders = await OrderDAL.findAll(findValue);
     return orders;

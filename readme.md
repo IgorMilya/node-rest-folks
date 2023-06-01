@@ -191,7 +191,7 @@ or
 
 #### example request http://localhost:5001/api/orders - GET - get all orders
 
-#### allowed query: type -- http://localhost:5001/api/orders/?type=delivery,dine-in
+#### allowed query: type -- http://localhost:5001/api/orders/?orderType=delivery,takeAwyay
 
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 
@@ -230,7 +230,7 @@ or
 
 #### example request http://localhost:5001/api/bills - GET - get all bills
 
-#### allowed query: type, status -- http://localhost:5001/api/bills/?type=delivery,dine-in&status=opened
+#### allowed query: type, status -- http://localhost:5001/api/bills/?orderType=delivery,dineIn&status=opened
 
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 

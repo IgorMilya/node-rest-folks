@@ -9,16 +9,15 @@ const create = async bill => {
     return createdBill;
 };
 
-const getAll = async ({ type, status }) => {
-    let findType = {};
-
-    if (!!type) {
-        const arr = [];
-        type.split(',').map(item => arr.push({ orderType: item }));
-        findType = { $or: arr };
+const getAll = async query => {
+    if (query.orderType) {
+        query.orderType = { $in: query.orderType?.split(',') };
     }
 
-    const findValue = { $and: [findType, !!status ? { status } : {}] };
+    const { page, limit, ...paramsQuery } = query;
+
+    const findValue = { $and: [paramsQuery] };
+    console.log(paramsQuery);
 
     const bills = await BillsDAL.findAll(findValue);
     return bills;

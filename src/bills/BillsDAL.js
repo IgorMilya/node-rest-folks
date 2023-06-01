@@ -8,10 +8,13 @@ const create = async bill => {
 
 const findAll = async findValue => {
     return BillDB.aggregate([
+        ...getBillsDATA,
         {
             $match: findValue,
         },
-        ...getBillsDATA,
+        {
+            $sort: { createdAt: -1 },
+        },
     ]);
 };
 

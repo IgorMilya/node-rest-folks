@@ -11,8 +11,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const { type } = req.query;
-        const orders = await OrderService.getAll(type);
+        const orders = await OrderService.getAll(req.query);
         return res.json(orders);
     } catch (e) {
         res.status(500).json(e.message);

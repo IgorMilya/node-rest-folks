@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { schemaOptions } from '../utils/schemaOptions.js';
+import { schemaOptions, schemaOptionsWithTimestamp } from '../utils/schemaOptions.js';
 
 const dishes = new mongoose.Schema(
     {
@@ -21,7 +21,7 @@ export const Bill = new mongoose.Schema(
         paymentMethod: String,
         dishes: [dishes],
     },
-    schemaOptions
+    schemaOptionsWithTimestamp
 );
 
 export default mongoose.model('BillDB', Bill, 'bills');

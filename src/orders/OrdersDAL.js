@@ -7,7 +7,13 @@ const create = async order => {
 };
 
 const findAll = async findValue => {
-    return OrderDB.aggregate([{ $match: findValue }, ...getOrderDATA]);
+    return OrderDB.aggregate([
+        { $match: findValue },
+        ...getOrderDATA,
+        {
+            $sort: { createdAt: -1 },
+        },
+    ]);
 };
 
 const findByID = async id => {
