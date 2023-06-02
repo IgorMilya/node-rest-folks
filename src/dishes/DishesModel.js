@@ -8,14 +8,14 @@ const Dish = new mongoose.Schema(
         price: { type: Number, required: true },
         picture: { type: String },
         description: { type: String },
-        categoryID: { type: mongoose.Types.ObjectId, ref: 'Category' },
-        subcategoryID: { type: mongoose.Types.ObjectId, ref: 'Category' },
+        categoryID: { type: mongoose.Types.ObjectId, ref: 'CategoryDB' },
+        subcategoryID: { type: mongoose.Types.ObjectId, ref: 'CategoryDB' },
         weight: { type: Number, required: true },
         bonus: Number,
         additionalFood: [
             {
                 type: mongoose.Types.ObjectId,
-                ref: 'Dish',
+                ref: 'DishDB',
             },
         ],
     },

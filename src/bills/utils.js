@@ -7,14 +7,17 @@ export const getBillsDATA = [
             as: 'ordersData',
         },
     },
-
+    {
+        $unwind: '$ordersData',
+    },
     {
         $addFields: {
             id: '$_id',
-            orderType: { $arrayElemAt: ['$ordersData.orderType', 0] },
-            orderNumber: { $arrayElemAt: ['$ordersData.orderNumber', 0] },
-            table: { $arrayElemAt: ['$ordersData.table', 0] },
-            description: { $arrayElemAt: ['$ordersData.description', 0] },
+            orderType: '$ordersData.orderType',
+            orderNumber: '$ordersData.orderNumber',
+            table: '$ordersData.table',
+            description: '$ordersData.description',
+            dishes: '$ordersData.dishes',
         },
     },
     {

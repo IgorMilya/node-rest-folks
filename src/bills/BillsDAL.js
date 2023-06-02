@@ -6,7 +6,7 @@ const create = async bill => {
     return BillDB.create(bill);
 };
 
-const findAll = async findValue => {
+const findAll = async ({ page, limit, findValue }) => {
     return BillDB.aggregate([
         ...getBillsDATA,
         {
@@ -14,6 +14,12 @@ const findAll = async findValue => {
         },
         {
             $sort: { createdAt: -1 },
+        },
+        {
+            $skip: (page - 1) * limit || 0,
+        },
+        {
+            $limit: Number(limit || 20),
         },
     ]);
 };
@@ -37,16 +43,10 @@ const deleteBill = async id => {
     return BillDB.findByIdAndDelete(id);
 };
 
-const findEmail = async id => {
-    const { email } = await BillDB.findById(id);
-    return email;
-};
-
 export const BillsDAL = {
     create,
     findAll,
     findByID,
     update,
     deleteBill,
-    findEmail,
 };

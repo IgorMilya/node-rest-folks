@@ -3,7 +3,10 @@ import { schemaOptionsWithTimestamp, schemaOptions } from '../utils/schemaOption
 
 const dishes = new mongoose.Schema(
     {
-        dishID: { type: mongoose.Types.ObjectId, ref: 'Dish' },
+        dishID: { type: mongoose.Types.ObjectId, ref: 'DishDB' },
+        title: { type: String, unique: true },
+        price: { type: Number },
+        picture: { type: String },
         amount: { type: Number, required: true },
         dishTotalPrice: { type: Number },
     },

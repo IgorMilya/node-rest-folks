@@ -1,6 +1,6 @@
 import { BillsDAL } from './BillsDAL.js';
 import { OrderDAL } from '../orders/OrdersDAL.js';
-import { sendEmail } from '../mail/MailServise.js';
+import { sendEmail } from '../mail/MailService.js';
 
 const create = async bill => {
     OrderDAL.updateStatus(bill.orderID);
@@ -17,9 +17,8 @@ const getAll = async query => {
     const { page, limit, ...paramsQuery } = query;
 
     const findValue = { $and: [paramsQuery] };
-    console.log(paramsQuery);
 
-    const bills = await BillsDAL.findAll(findValue);
+    const bills = await BillsDAL.findAll({ page, limit, findValue });
     return bills;
 };
 
@@ -52,10 +51,9 @@ const sendBill = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const email = await BillsDAL.findEmail(id);
+    const [{ email, dishes, totalPrice, orderNumber }] = await BillsDAL.findByID(id);
 
-    sendEmail(email);
-
+    sendEmail({ email, dishes, totalPrice, orderNumber });
     return email;
 };
 

@@ -1,29 +1,18 @@
-import mongoose from 'mongoose';
 import OrderDB from './OrdersModel.js';
-import { getOrderDATA } from './utils.js';
 
 const create = async order => {
     return OrderDB.create(order);
 };
 
-const findAll = async findValue => {
-    return OrderDB.aggregate([
-        { $match: findValue },
-        ...getOrderDATA,
-        {
-            $sort: { createdAt: -1 },
-        },
-    ]);
+const findAll = async ({ page, limit, findValue }) => {
+    return OrderDB.find(findValue)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit);
 };
 
 const findByID = async id => {
-    const objectId = new mongoose.Types.ObjectId(id);
-    return OrderDB.aggregate([
-        {
-            $match: { _id: objectId },
-        },
-        ...getOrderDATA,
-    ]);
+    return OrderDB.findById(id);
 };
 
 const update = async order => {
@@ -37,8 +26,6 @@ const updateStatus = async id => {
 const deleteOrder = async id => {
     return OrderDB.findByIdAndDelete(id);
 };
-
-const findEmail = async id => {};
 
 export const OrderDAL = {
     create,

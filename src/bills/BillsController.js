@@ -53,6 +53,7 @@ const deleteBill = async (req, res) => {
 const sendBill = async (req, res) => {
     try {
         const email = await BillsService.sendBill(req.params.id);
+
         return res.json(`bill to ${email} was sent`);
     } catch (e) {
         res.status(500).json(e.message);

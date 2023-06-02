@@ -1,7 +1,17 @@
 import { OrderDAL } from './OrdersDAL.js';
+import { DishesDAL } from '../dishes/DishesDAL.js';
 
 const create = async order => {
-    const createdOrder = await OrderDAL.create(order);
+    const { dishes } = order;
+
+    const totalDishInfo = await Promise.all(
+        dishes.map(async item => {
+            const [{ title, price, picture }] = await DishesDAL.findByID(item.dishID); // TODO fix after dish will update
+            return { ...item, title, price, picture };
+        })
+    );
+
+    const createdOrder = await OrderDAL.create({ ...order, dishes: totalDishInfo });
     return createdOrder;
 };
 
@@ -14,7 +24,7 @@ const getAll = async query => {
 
     const findValue = { $and: [paramsQuery, { status: 'opened' }] };
 
-    const orders = await OrderDAL.findAll(findValue);
+    const orders = await OrderDAL.findAll({ page, limit, findValue });
     return orders;
 };
 
@@ -22,7 +32,7 @@ const getOne = async id => {
     if (!id) {
         throw new Error('ID was not set');
     }
-    const [order] = await OrderDAL.findByID(id);
+    const order = await OrderDAL.findByID(id);
     return order;
 };
 

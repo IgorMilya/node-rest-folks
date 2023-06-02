@@ -13,6 +13,7 @@ export const billsValidateSchema = Joi.object({
             amount: Joi.number().required().integer().positive(),
             title: Joi.string().min(3),
             price: Joi.number().required().positive(),
+            dishTotalPrice: Joi.number().positive(),
         })
     ),
 });

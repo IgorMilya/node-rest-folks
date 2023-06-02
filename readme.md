@@ -193,6 +193,8 @@ or
 
 #### allowed query: type -- http://localhost:5001/api/orders/?orderType=delivery,takeAwyay
 
+#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/orders/?page=2&limit=1
+
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 
 #### example request http://localhost:5001/api/orders/645e2c4a66bbb2ae16af76e3 - GET - get one order by id
@@ -201,7 +203,7 @@ or
 
     {
         "orderType": "delivery",
-                "orderNumber": "test",
+                "orderNumber": 10,
 
         "dishes":   [
         {
@@ -232,6 +234,8 @@ or
 
 #### allowed query: type, status -- http://localhost:5001/api/bills/?orderType=delivery,dineIn&status=opened
 
+#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/bills/?page=2&limit=1
+
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 
 ##### status pattern(/^opened|closed$/)
@@ -240,24 +244,8 @@ or
 
 #### example request http://localhost:5001/api/bills - POST - create one bill
 
-    {
-        "orderType": "takeaway",
-        "orderNumber": "12",
-        "orderID": "646fab97ecbd93be533d240b",
-        "table": "T-9",
-        "dishes": [
-            {
-                "dishID": "646e6c0fcb7e030760ff7908",
-                "title": "ffff",
-                "price": 120,
-                "amount": 4
-            }
-        ],
-        "description": "aasda",
-        "totalPrice": 125,
-        "status": "closed"
-    }
-
 #### example request http://localhost:5001/api/bills - PUT - update one bill
 
 #### example request http://localhost:5001/api/bills/645e2c4a66bbb2ae16af76e3 - DELETE - get one bill by id
+
+#### example request send bills to email - http://localhost:5001/api/bills/send/647a68a7771be4d87ba4b2e0
