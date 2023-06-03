@@ -2,7 +2,17 @@ import { UserService } from "./usersService.js";
 
 const getAll = async (req, res) => {
   try {
-    const data = await UserService.getAll();
+    const data = await UserService.getAll(req.query);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+};
+
+const getUsersLogin = async (req, res) => {
+  try {
+    const data = await UserService.getUsersLogin();
+
     res.json(data);
   } catch (err) {
     res.status(500).json(err.message);
@@ -77,6 +87,7 @@ const refresh = async (req, res) => {
 
 export const UserController = {
   getAll,
+  getUsersLogin,
   update,
   registration,
   login,

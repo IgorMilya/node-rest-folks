@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { schemaOptions } from "../utils/schemaOptions.js";
+import { schemaOptionsWithTimestamp } from "../utils/schemaOptions.js";
 
 export const userSchema = new mongoose.Schema(
   {
@@ -34,6 +34,10 @@ export const userSchema = new mongoose.Schema(
       type: String,
       default: "Waiter",
     },
+    status: {
+      type: String,
+      default: "active",
+    },
   },
-  schemaOptions
+  schemaOptionsWithTimestamp
 );

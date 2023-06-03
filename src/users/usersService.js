@@ -3,9 +3,34 @@ import { generateTokens } from "../tokens/utils.js";
 import { UserDAL } from "./usersDAL.js";
 import { TokenDAL } from "../tokens/tokenDAL.js";
 import { validateRefreshToken } from "../tokens/validateTokens.js";
+import UsersModel from "./UsersModel.js";
 
-const getAll = async () => {
-  return UserDAL.findAll();
+const getAll = async (query) => {
+  if (query.role) {
+    query.role = { $in: query.role?.split(",") };
+  }
+  if (query.field) {
+    const regexp = new RegExp(query.field, "i");
+    query.$or = [];
+    Object.keys(UsersModel.schema.paths).forEach((path) => {
+      if (path !== "_id" && path !== "createdAt" && path !== "updatedAt") {
+        const fieldQuery = {};
+        fieldQuery[path] = regexp;
+        query.$or.push(fieldQuery);
+      }
+    });
+    delete query.field;
+  }
+
+  const { page, limit, ...findValue } = query;
+  const perPage = limit || 8;
+  const skip = ((parseInt(page) || 1) - 1) * perPage;
+
+  return UserDAL.findAll({ skip, perPage, findValue });
+};
+
+const getUsersLogin = async () => {
+  return UserDAL.getUserLogin();
 };
 
 const update = async ({ id, updateData, picture }) => {
@@ -105,6 +130,7 @@ const refresh = async ({ refreshToken }) => {
 
 export const UserService = {
   getAll,
+  getUsersLogin,
   update,
   registration,
   login,
