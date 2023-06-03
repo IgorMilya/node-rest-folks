@@ -32,7 +32,7 @@ export const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "WAITER",
+      default: "Waiter",
     },
   },
   schemaOptions

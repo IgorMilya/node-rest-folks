@@ -1,6 +1,7 @@
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { unlinkSync } from "fs";
+import { _logFunc } from "nodemailer/lib/shared/index.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -20,8 +21,11 @@ export const uploadImageCloudinaryMiddleware = (req, res, next) => {
       return res.status(400).json({ error: "File upload error" });
     }
     if (!req.file) {
+      req.body = req.body || "";
+
       return next();
     }
+
     cloudinary.uploader.upload(req.file.path, (error, result) => {
       if (error) {
         console.error(error);
@@ -30,7 +34,6 @@ export const uploadImageCloudinaryMiddleware = (req, res, next) => {
           .json({ error: "Error downloading the file on Cloudinary" });
       }
       unlinkSync(req.file.path);
-
       req.picture = result.secure_url;
       next();
     });

@@ -36,7 +36,6 @@ app.use((req, res, next) => {
 
 app.get("/api/static/:dirName/:fileName", (req, res) => {
   const { dirName, fileName } = req.params;
-  console.log(req.params);
   const filePath = path.join(process.cwd(), "static", dirName, fileName);
   readFile(filePath, "utf-8", (err, data) => {
     if (err) {

@@ -25,14 +25,10 @@ const update = async (req, res) => {
 
 const registration = async (req, res) => {
   try {
+    req.body.userImage = req.picture;
     const data = await UserService.registration(req?.body);
 
-    res.cookie("refreshToken", data.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-
-    res.json({ data: data.data, accessToken: data.accessToken });
+    res.json({ data: "Registration success" });
   } catch (err) {
     res.status(500).json(err.message);
   }

@@ -6,7 +6,11 @@ export const usersRouter = new Router();
 export const userDefaultPath = "/api/users";
 
 usersRouter.get("/", UserController.getAll);
-usersRouter.post("/registration", UserController.registration);
+usersRouter.post(
+  "/registration",
+  uploadImageCloudinaryMiddleware,
+  UserController.registration
+);
 usersRouter.post("/login", UserController.login);
 usersRouter.post("/logout", UserController.logout);
 usersRouter.get("/refresh", UserController.refresh);
