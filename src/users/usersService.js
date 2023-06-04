@@ -4,6 +4,7 @@ import { UserDAL } from "./usersDAL.js";
 import { TokenDAL } from "../tokens/tokenDAL.js";
 import { validateRefreshToken } from "../tokens/validateTokens.js";
 import UsersModel from "./UsersModel.js";
+import { sendEmailRegistration } from "../mail/MailService.js";
 
 const getAll = async (query) => {
   if (query.role) {
@@ -58,6 +59,15 @@ const registration = async (user) => {
       role: userData.role,
     });
 
+    if (data.email) {
+      const { email, firstName, secondName } = data;
+      await sendEmailRegistration({
+        email,
+        firstName,
+        secondName,
+        password: user.password,
+      });
+    }
     await TokenDAL.create({
       user: data._id,
       refreshToken: tokens.refreshToken,
