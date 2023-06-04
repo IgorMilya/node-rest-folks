@@ -31,3 +31,12 @@ export const getBillsDATA = [
         },
     },
 ];
+
+export const checkTotalPrice = ({ dishes, totalPrice }) => {
+    let calculatedTotalPrice = 0;
+    dishes.map(({ price, amount }) => (calculatedTotalPrice += price * amount));
+
+    if (totalPrice !== calculatedTotalPrice) {
+        throw new Error('it isn`t correct totalPrice');
+    }
+};

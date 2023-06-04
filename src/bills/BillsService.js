@@ -1,9 +1,14 @@
 import { BillsDAL } from './BillsDAL.js';
 import { OrderDAL } from '../orders/OrdersDAL.js';
 import { sendEmail } from '../mail/MailService.js';
+import { checkTotalPrice } from './utils.js';
 
 const create = async bill => {
     OrderDAL.updateStatus(bill.orderID);
+
+    const { dishes } = await OrderDAL.findByID(bill.orderID);
+    checkTotalPrice({ dishes, totalPrice: bill.totalPrice });
+
     const createdBill = await BillsDAL.create(bill);
     return createdBill;
 };
@@ -33,6 +38,8 @@ const update = async bill => {
     if (!bill.id) {
         throw new Error('ID was not set');
     }
+
+    checkTotalPrice({ ...bill });
 
     const updateBill = await BillsDAL.update(bill);
     return updateBill;
