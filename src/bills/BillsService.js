@@ -4,7 +4,6 @@ import { sendEmail } from '../mail/MailService.js';
 
 const create = async bill => {
     OrderDAL.updateStatus(bill.orderID);
-
     const createdBill = await BillsDAL.create(bill);
     return createdBill;
 };
@@ -34,6 +33,7 @@ const update = async bill => {
     if (!bill.id) {
         throw new Error('ID was not set');
     }
+
     const updateBill = await BillsDAL.update(bill);
     return updateBill;
 };

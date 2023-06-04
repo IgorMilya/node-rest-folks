@@ -17,6 +17,7 @@ export const getBillsDATA = [
             orderNumber: '$ordersData.orderNumber',
             table: '$ordersData.table',
             description: '$ordersData.description',
+            user: '$ordersData.user',
             dishes: '$ordersData.dishes',
         },
     },
