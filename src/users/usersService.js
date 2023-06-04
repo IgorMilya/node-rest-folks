@@ -4,6 +4,7 @@ import { UserDAL } from "./usersDAL.js";
 import { TokenDAL } from "../tokens/tokenDAL.js";
 import { validateRefreshToken } from "../tokens/validateTokens.js";
 import UsersModel from "./UsersModel.js";
+import { sendEmailRegistration } from "../mail/MailService.js";
 
 const getAll = async (query) => {
   if (query.role) {
@@ -49,6 +50,8 @@ const update = async ({ id, updateData, picture }) => {
 
 const registration = async (user) => {
   try {
+    const isHashPassword = JSON.stringify(user.password);
+
     user.password = await bcrypt.hash(user.password, 3);
 
     const data = await UserDAL.create({ user });
@@ -58,6 +61,15 @@ const registration = async (user) => {
       role: userData.role,
     });
 
+    if (userData.email) {
+      const { email, firstName, secondName } = userData;
+      await sendEmailRegistration({
+        email,
+        firstName,
+        secondName,
+        password: isHashPassword,
+      });
+    }
     await TokenDAL.create({
       user: data._id,
       refreshToken: tokens.refreshToken,
