@@ -3,11 +3,13 @@ import { DishesDAL } from '../dishes/DishesDAL.js';
 
 const create = async order => {
     const { dishes } = order;
-
     const totalDishInfo = await Promise.all(
         dishes.map(async item => {
-            const [{ title, price, picture }] = await DishesDAL.findByID(item.dishID); // TODO fix after dish will update
-            const dishTotalPrice = item.amount * price;
+            console.log(item);
+            //const { title, price, picture }
+            const a = await DishesDAL.findByID(item.dishID);
+            //const dishTotalPrice = item.amount * price;
+            console.log(a);
             return { ...item, dishTotalPrice, title, price, picture };
         })
     );
