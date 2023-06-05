@@ -1,16 +1,9 @@
 import { OrderDAL } from './OrdersDAL.js';
-import { DishesDAL } from '../dishes/DishesDAL.js';
+import { findAdditionalFields } from './utils.js';
 
 const create = async order => {
-    const { dishes } = order;
-    const totalDishInfo = await Promise.all(
-        dishes.map(async item => {
-            const { title, price, picture } = await DishesDAL.findByID(item.dishID);
-            const dishTotalPrice = item.amount * price;
-            return { ...item, dishTotalPrice, title, price, picture };
-        })
-    );
-
+    const totalDishInfo = await findAdditionalFields(order);
+    console.log(totalDishInfo);
     const createdOrder = await OrderDAL.create({ ...order, dishes: totalDishInfo });
     return createdOrder;
 };
@@ -40,7 +33,8 @@ const update = async order => {
     if (!order.id) {
         throw new Error('ID was not set');
     }
-    const updateOrder = await OrderDAL.update(order);
+    const totalDishInfo = await findAdditionalFields(order);
+    const updateOrder = await OrderDAL.update({ ...order, dishes: totalDishInfo });
     return updateOrder;
 };
 
