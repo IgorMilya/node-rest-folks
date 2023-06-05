@@ -22,4 +22,4 @@ const Dish = new mongoose.Schema(
   schemaOptionsWithTimestamp
 );
 
-export default mongoose.model("DishDB2", Dish, "dishes");
+export default mongoose.model("DishDB", Dish, "dishes");
