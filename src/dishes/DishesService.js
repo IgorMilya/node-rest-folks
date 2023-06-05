@@ -31,7 +31,7 @@ const getAll = async (query) => {
     findValues.status = "active";
   }
 
-  if (!!findCategory.length) {
+  if (!!findCategory?.length) {
     const arrayIDCategories = {
       $in: findCategory.map((item) => item._id),
     };
@@ -40,7 +40,7 @@ const getAll = async (query) => {
       parent: arrayIDCategories,
     });
 
-    if (!!categoryParent.length) {
+    if (!!categoryParent?.length) {
       findValues.category = {
         $in: categoryParent.map((item) => item._id),
       };

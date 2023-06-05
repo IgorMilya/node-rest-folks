@@ -11,6 +11,7 @@ const findAll = async ({ skip, perPage, findValues }) => {
   const data = await DishDB.find(findValues)
     .select("-createdAt -updatedAt")
     .sort({ createdAt: -1 })
+    .populate("additionalFood")
     .skip(skip)
     .limit(perPage);
 
@@ -18,14 +19,7 @@ const findAll = async ({ skip, perPage, findValues }) => {
 };
 
 const findByID = async (id) => {
-  const objectId = new mongoose.Types.ObjectId(id);
-
-  return DishDB.aggregate([
-    {
-      $match: { _id: objectId },
-    },
-    ...getDishDATA,
-  ]);
+  return DishDB.findById(id).populate("additionalFood");
 };
 
 const update = async (dish) => {
