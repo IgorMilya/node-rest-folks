@@ -3,7 +3,7 @@ import Joi from 'joi';
 export const billsValidateSchema = Joi.object({
     orderID: Joi.string().required(),
     status: Joi.string().pattern(/^opened|closed$/),
-    totalPrice: Joi.number().required().positive(),
+    totalPrice: Joi.number().positive(),
     tip: Joi.number().positive(),
     email: Joi.string().email(),
     paymentMethod: Joi.string(),

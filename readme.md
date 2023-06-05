@@ -193,7 +193,7 @@ or
 
 #### allowed query: type -- http://localhost:5001/api/orders/?orderType=delivery,takeAwyay
 
-#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/orders/?page=2&limit=1
+#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/orders/?orderType=delivery,takeAwyay&page=2&limit=1
 
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 
@@ -234,7 +234,7 @@ or
 
 #### allowed query: type, status -- http://localhost:5001/api/bills/?orderType=delivery,dineIn&status=opened
 
-#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/bills/?page=2&limit=1
+#### You can pass "limit" and "skip" params to limit and skip the results for pagination, http://localhost:5001/api/bills/?orderType=delivery,dineIn&status=opened&page=2&limit=1
 
 ##### orderType: .pattern(/^takeaway|delivery|dine-in$/)
 

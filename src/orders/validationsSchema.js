@@ -19,4 +19,5 @@ export const ordersValidateSchema = Joi.object({
     ),
     description: Joi.string().min(5),
     totalPrice: Joi.number().integer().positive(),
+    user: Joi.string().min(3),
 });

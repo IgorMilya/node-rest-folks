@@ -17,6 +17,7 @@ export const getBillsDATA = [
             orderNumber: '$ordersData.orderNumber',
             table: '$ordersData.table',
             description: '$ordersData.description',
+            user: '$ordersData.user',
             dishes: '$ordersData.dishes',
         },
     },
@@ -30,3 +31,12 @@ export const getBillsDATA = [
         },
     },
 ];
+
+export const checkTotalPrice = ({ dishes, totalPrice }) => {
+    let calculatedTotalPrice = 0;
+    dishes.map(({ price, amount }) => (calculatedTotalPrice += price * amount));
+
+    if (totalPrice !== calculatedTotalPrice) {
+        throw new Error('it isn`t correct totalPrice');
+    }
+};
