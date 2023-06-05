@@ -5,11 +5,8 @@ const create = async order => {
     const { dishes } = order;
     const totalDishInfo = await Promise.all(
         dishes.map(async item => {
-            console.log(item);
-            //const { title, price, picture }
-            const a = await DishesDAL.findByID(item.dishID);
-            //const dishTotalPrice = item.amount * price;
-            console.log(a);
+            const { title, price, picture } = await DishesDAL.findByID(item.dishID);
+            const dishTotalPrice = item.amount * price;
             return { ...item, dishTotalPrice, title, price, picture };
         })
     );
