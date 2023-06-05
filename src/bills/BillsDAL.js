@@ -7,7 +7,7 @@ const create = async bill => {
 };
 
 const findAll = async ({ page, limit, findValue }) => {
-    return BillDB.aggregate([
+    const [{ paginatedResults, count }] = await BillDB.aggregate([
         ...getBillsDATA,
         {
             $match: findValue,
@@ -16,12 +16,20 @@ const findAll = async ({ page, limit, findValue }) => {
             $sort: { createdAt: -1 },
         },
         {
-            $skip: (page - 1) * limit || 0,
-        },
-        {
-            $limit: Number(limit || 20),
+            $facet: {
+                paginatedResults: [{ $skip: (page - 1) * limit || 0 }, { $limit: Number(limit || 20) }],
+                count: [
+                    {
+                        $count: 'count',
+                    },
+                ],
+            },
         },
     ]);
+
+    const [{ count: totalCount }] = count;
+
+    return { data: paginatedResults, totalCount };
 };
 
 const findByID = async id => {

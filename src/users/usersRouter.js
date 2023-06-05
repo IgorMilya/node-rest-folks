@@ -15,6 +15,8 @@ usersRouter.post(
 usersRouter.post("/login", UserController.login);
 usersRouter.post("/logout", UserController.logout);
 usersRouter.get("/refresh", UserController.refresh);
+
+usersRouter.get("/:userId", UserController.getByID);
 usersRouter.post(
   "/:userId",
   uploadImageCloudinaryMiddleware,

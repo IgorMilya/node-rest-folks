@@ -4,6 +4,7 @@ import { UserDAL } from "./usersDAL.js";
 import { TokenDAL } from "../tokens/tokenDAL.js";
 import { validateRefreshToken } from "../tokens/validateTokens.js";
 import UsersModel from "./UsersModel.js";
+import { sendEmailRegistration } from "../mail/MailService.js";
 
 const getAll = async (query) => {
   if (query.role) {
@@ -13,7 +14,7 @@ const getAll = async (query) => {
     const regexp = new RegExp(query.field, "i");
     query.$or = [];
     Object.keys(UsersModel.schema.paths).forEach((path) => {
-      if (path !== "_id") {
+      if (path !== "_id" && path !== "createdAt" && path !== "updatedAt") {
         const fieldQuery = {};
         fieldQuery[path] = regexp;
         query.$or.push(fieldQuery);
@@ -27,6 +28,10 @@ const getAll = async (query) => {
   const skip = ((parseInt(page) || 1) - 1) * perPage;
 
   return UserDAL.findAll({ skip, perPage, findValue });
+};
+
+const getByID = async (id) => {
+  return UserDAL.findByID({ id });
 };
 
 const getUsersLogin = async () => {
@@ -49,6 +54,8 @@ const update = async ({ id, updateData, picture }) => {
 
 const registration = async (user) => {
   try {
+    const isHashPassword = JSON.stringify(user.password);
+
     user.password = await bcrypt.hash(user.password, 3);
 
     const data = await UserDAL.create({ user });
@@ -58,6 +65,15 @@ const registration = async (user) => {
       role: userData.role,
     });
 
+    if (userData.email) {
+      const { email, firstName, secondName } = userData;
+      await sendEmailRegistration({
+        email,
+        firstName,
+        secondName,
+        password: isHashPassword,
+      });
+    }
     await TokenDAL.create({
       user: data._id,
       refreshToken: tokens.refreshToken,
@@ -130,6 +146,7 @@ const refresh = async ({ refreshToken }) => {
 
 export const UserService = {
   getAll,
+  getByID,
   getUsersLogin,
   update,
   registration,

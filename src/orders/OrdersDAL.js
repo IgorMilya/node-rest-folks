@@ -5,10 +5,13 @@ const create = async order => {
 };
 
 const findAll = async ({ page, limit, findValue }) => {
-    return OrderDB.find(findValue)
+    const totalCount = await OrderDB.countDocuments(findValue);
+    const data = await OrderDB.find(findValue)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit);
+
+    return { data, totalCount };
 };
 
 const findByID = async id => {
