@@ -9,6 +9,15 @@ const getAll = async (req, res) => {
   }
 };
 
+const getByID = async (req, res) => {
+  try {
+    const data = await UserService.getByID(req.params.userId);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+};
+
 const getUsersLogin = async (req, res) => {
   try {
     const data = await UserService.getUsersLogin();
@@ -87,6 +96,7 @@ const refresh = async (req, res) => {
 
 export const UserController = {
   getAll,
+  getByID,
   getUsersLogin,
   update,
   registration,

@@ -30,6 +30,10 @@ const getAll = async (query) => {
   return UserDAL.findAll({ skip, perPage, findValue });
 };
 
+const getByID = async (id) => {
+  return UserDAL.findByID({ id });
+};
+
 const getUsersLogin = async () => {
   return UserDAL.getUserLogin();
 };
@@ -142,6 +146,7 @@ const refresh = async ({ refreshToken }) => {
 
 export const UserService = {
   getAll,
+  getByID,
   getUsersLogin,
   update,
   registration,
