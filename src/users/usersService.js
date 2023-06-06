@@ -10,8 +10,8 @@ const getAll = async (query) => {
   if (query.role) {
     query.role = { $in: query.role?.split(",") };
   }
-  if (query.field) {
-    const regexp = new RegExp(query.field, "i");
+  if (query.search) {
+    const regexp = new RegExp(query.search, "i");
     query.$or = [];
     Object.keys(UsersModel.schema.paths).forEach((path) => {
       if (path !== "_id" && path !== "createdAt" && path !== "updatedAt") {
@@ -20,7 +20,7 @@ const getAll = async (query) => {
         query.$or.push(fieldQuery);
       }
     });
-    delete query.field;
+    delete query.search;
   }
 
   const { page, limit, ...findValue } = query;

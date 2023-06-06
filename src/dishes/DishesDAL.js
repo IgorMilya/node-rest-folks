@@ -9,12 +9,12 @@ const create = async (dish) => {
 const findAll = async ({ skip, perPage, findValues }) => {
   const totalCount = await DishDB.countDocuments(findValues);
   const data = await DishDB.find(findValues)
-    .select("-createdAt -updatedAt")
     .sort({ createdAt: -1 })
+    .select("-createdAt -updatedAt")
     .populate("additionalFood")
-    .skip(skip)
-    .limit(perPage);
-
+    .populate("category", "title")
+    .limit(perPage)
+    .skip(skip);
   return { totalCount, data };
 };
 

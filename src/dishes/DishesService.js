@@ -9,9 +9,8 @@ const create = async (dish) => {
 
 const getAll = async (query) => {
   const { page, limit, status, ...findValues } = query;
-  const perPage = limit || 8;
+  const perPage = parseInt(limit) || 8;
   const skip = ((parseInt(page) || 1) - 1) * perPage;
-
   const findCategory = await CategoryDAL.find({
     title: { $in: findValues.category?.split(",") },
   });
@@ -21,6 +20,7 @@ const getAll = async (query) => {
     findValues.$or = ["title", "description"].map((item) => ({
       [item]: regexp,
     }));
+    delete findValues.search;
   }
 
   if (!status) {
@@ -39,19 +39,17 @@ const getAll = async (query) => {
     const categoryParent = await CategoryDAL.find({
       parent: arrayIDCategories,
     });
-
     if (!!categoryParent?.length) {
       findValues.category = {
         $in: categoryParent.map((item) => item._id),
       };
-
       return DishesDAL.findAll({ skip, perPage, findValues });
     } else {
       findValues.category = arrayIDCategories;
       return DishesDAL.findAll({ skip, perPage, findValues });
     }
   } else {
-    return DishesDAL.findAll({ skip, perPage });
+    return DishesDAL.findAll({ skip, perPage, findValues });
   }
 };
 
