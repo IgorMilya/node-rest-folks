@@ -19,7 +19,10 @@ const findAll = async ({ skip, perPage, findValues }) => {
 };
 
 const findByID = async (id) => {
-  return DishDB.findById(id).populate("additionalFood");
+  return DishDB.findById(id)
+    .select("-createdAt -updatedAt")
+    .populate("additionalFood")
+    .populate("category", "title");
 };
 
 const update = async (dish) => {
