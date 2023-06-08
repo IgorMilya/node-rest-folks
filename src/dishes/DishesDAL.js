@@ -9,7 +9,7 @@ const create = async (dish) => {
 const findAll = async ({ skip, perPage, findValues }) => {
   const totalCount = await DishDB.countDocuments(findValues);
   const data = await DishDB.find(findValues)
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1 })
     .select("-createdAt -updatedAt")
     .populate("additionalFood")
     .populate("category", "title")
