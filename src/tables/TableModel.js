@@ -17,8 +17,9 @@ const reservationsInfoSchema = new mongoose.Schema(
 export const tableSchema = new mongoose.Schema(
   {
     number: { type: String, required: true, unique: true },
-    tableLimit: { type: Number, required: true },
-    reserved: { type: Boolean, required: true, default: false },
+    seats: { type: Number, required: true },
+    status: { type: String, required: true, default: 'free' },
+    sector: { type: Number, required: true },
     reservationInfo: { type: [reservationsInfoSchema], required: true, default: [] },
   },
   schemaOptions,

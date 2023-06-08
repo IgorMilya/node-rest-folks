@@ -1,8 +1,17 @@
-import { services } from './services.js'
+import { TableService } from './services.js'
 
-const getFreeTables = async (req, res) => {
+const getFree = async (req, res) => {
   try {
-    const data = await services.getFreeTables()
+    const data = await TableService.getFree()
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+const getTableStatus = async (req, res) => {
+  try {
+    const data = await TableService.getTableStatus(req.params.tableNumber)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -11,7 +20,7 @@ const getFreeTables = async (req, res) => {
 
 const getTableReservationInfo = async (req, res) => {
   try {
-    const data = await services.getTableReservationInfo(req.params.tableNumber)
+    const data = await TableService.getTableReservationInfo(req.params.tableNumber)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -21,7 +30,7 @@ const getTableReservationInfo = async (req, res) => {
 const getReservationBySelectDate = async (req, res) => {
   const { id, date } = req.params
   try {
-    const data = await services.getReservationBySelectedDate(id, date)
+    const data = await TableService.getReservationBySelectedDate(id, date)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -30,7 +39,7 @@ const getReservationBySelectDate = async (req, res) => {
 
 const addNewTable = async (req, res) => {
   try {
-    const data = await services.addNewTable(req.body)
+    const data = await TableService.addNewTable(req.body)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -39,16 +48,16 @@ const addNewTable = async (req, res) => {
 
 const deleteTable = async (req, res) => {
   try {
-    const data = await services.deleteTable(req.params.id)
+    const data = await TableService.deleteTable(req.params.id)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
   }
 }
 
-const getAllTables = async (req, res) => {
+const getAll = async (req, res) => {
   try {
-    const data = await services.getAllTables()
+    const data = await TableService.getAll()
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -57,7 +66,7 @@ const getAllTables = async (req, res) => {
 
 const updateTableStatus = async (req, res) => {
   try {
-    const data = await services.changeTableStatus(req.params.tableNumber)
+    const data = await TableService.changeTableStatus(req.params.tableNumber)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -66,7 +75,7 @@ const updateTableStatus = async (req, res) => {
 
 const addNewReservation = async (req, res) => {
   try {
-    const data = await services.addNewReservation(req.params.id, req.body)
+    const data = await TableService.addNewReservation(req.params.id, req.body)
 
     res.json(data)
   } catch (err) {
@@ -77,7 +86,7 @@ const addNewReservation = async (req, res) => {
 const removeReservation = async (req, res) => {
   try {
     const { tableNumber, id } = req.params
-    const data = await services.removeReservation(tableNumber, id)
+    const data = await TableService.removeReservation(tableNumber, id)
 
     res.json(data)
   } catch (err) {
@@ -87,20 +96,21 @@ const removeReservation = async (req, res) => {
 
 const updateReservation = async (req, res) => {
   try {
-    const data = await services.updateReservation(req.params.id, req.body)
+    const data = await TableService.updateReservation(req.params.id, req.body)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
   }
 }
 
-export const controllers = {
-  getFreeTables,
+export const TableController = {
+  getFree,
+  getTableStatus,
   getTableReservationInfo,
   getReservationBySelectDate,
   addNewTable,
   deleteTable,
-  getAllTables,
+  getAll,
   updateTableStatus,
   addNewReservation,
   removeReservation,
