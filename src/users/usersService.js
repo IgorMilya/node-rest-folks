@@ -38,13 +38,14 @@ const getUsersLogin = async () => {
   return UserDAL.getUserLogin();
 };
 
-const update = async ({ id, updateData, picture }) => {
+const update = async ({ id, updateData }) => {
   if (updateData?.password) {
     updateData.password = await bcrypt.hash(updateData.password, 3);
   }
 
-  if (picture) {
-    updateData.userImage = picture;
+  if (updateData.picture) {
+    updateData.userImage = updateData.picture;
+    delete updateData.picture;
   }
 
   await UserDAL.update({ id, updateData });

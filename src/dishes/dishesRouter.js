@@ -9,6 +9,7 @@ export const dishRouter = new Router();
 export const dishesDefaultPath = "/api/dishes";
 dishRouter.post(
   "/",
+  uploadImageCloudinaryMiddleware,
   validateSchema(dishesValidateSchema),
   DishesController.create
 );

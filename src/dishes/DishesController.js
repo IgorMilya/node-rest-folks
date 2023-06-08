@@ -11,8 +11,6 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const { q, category, subcategory } = req.query;
-
     const dishes = await DishesService.getAll(req.query);
     return res.json(dishes);
   } catch (e) {
@@ -36,9 +34,6 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    if (req.picture) {
-      req.body.picture = req.picture;
-    }
     const updatedDish = await DishesService.update(req.body);
     return res.json(updatedDish);
   } catch (e) {

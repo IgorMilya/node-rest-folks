@@ -34,7 +34,7 @@ export const uploadImageCloudinaryMiddleware = (req, res, next) => {
           .json({ error: "Error downloading the file on Cloudinary" });
       }
       unlinkSync(req.file.path);
-      req.picture = result.secure_url;
+      req.body.picture = result.secure_url;
       next();
     });
   });

@@ -33,7 +33,6 @@ const update = async (req, res) => {
     const data = await UserService.update({
       id: req.params.userId,
       updateData: req.body,
-      picture: req.picture,
     });
 
     res.json(data);
@@ -44,7 +43,10 @@ const update = async (req, res) => {
 
 const registration = async (req, res) => {
   try {
-    if (req.picture) req.body.userImage = req.picture;
+    if (req.body.picture) {
+      req.body.userImage = req.body.picture;
+      delete req.body.picture;
+    }
     const data = await UserService.registration(req?.body);
 
     res.json({ data: "Registration success" });
