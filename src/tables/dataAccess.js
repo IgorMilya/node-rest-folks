@@ -1,27 +1,26 @@
-import { TableModel } from './TableModel.js'
+import { Model } from './model.js'
 
-const getAllTables = async () => TableModel.find()
+const getAll = async () => Model.find()
 
-const addNewTable = async body => new TableModel(body).save()
+const addNew = async body => new Model(body).save()
 
-const getTable = async id => TableModel.findById(id)
+const getTable = async id => Model.findById(id)
 
-const getTableByName = async tableNumber => TableModel.findOne({ number: tableNumber })
+const getTableByName = async tableNumber => Model.findOne({ number: tableNumber })
 
-const updateTableInfo = async (id, data) => TableModel.findByIdAndUpdate(id, data)
+const deleteTable = async id => Model.findByIdAndDelete(id)
 
-const deleteTableDataAccess = async id => TableModel.findByIdAndDelete(id)
+const updateTableInfo = async (id, data) => Model.findByIdAndUpdate(id, data)
 
-const removeReservation = async (filterField, fieldToRemove) => {
-  return TableModel.updateOne(filterField, fieldToRemove)
-}
+// const removeReservation = async (filterField, fieldToRemove) => {
+//   return TableModel.updateOne(filterField, fieldToRemove)
+// }
 
-export const dataAccess = {
-  getAllTables,
-  addNewTable,
+export const TablesDataAccess = {
+  getAll,
+  addNew,
   getTable,
   getTableByName,
   updateTableInfo,
-  deleteTableDataAccess,
-  removeReservation,
+  deleteTable,
 }
