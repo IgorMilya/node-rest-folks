@@ -1,5 +1,23 @@
 import { TableService } from './services.js'
 
+const getCanvas = async (req, res) => {
+  try {
+    const data = await TableService.getCanvas()
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
+const getAll = async (req, res) => {
+  try {
+    const data = await TableService.getAll()
+    res.json(data)
+  } catch (err) {
+    res.status(500).json(err.message)
+  }
+}
+
 const getFree = async (req, res) => {
   try {
     const data = await TableService.getFree()
@@ -12,25 +30,6 @@ const getFree = async (req, res) => {
 const getTableStatus = async (req, res) => {
   try {
     const data = await TableService.getTableStatus(req.params.tableNumber)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-const getTableReservationInfo = async (req, res) => {
-  try {
-    const data = await TableService.getTableReservationInfo(req.params.tableNumber)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-const getReservationBySelectDate = async (req, res) => {
-  const { id, date } = req.params
-  try {
-    const data = await TableService.getReservationBySelectedDate(id, date)
     res.json(data)
   } catch (err) {
     res.status(500).json(err.message)
@@ -55,15 +54,6 @@ const deleteTable = async (req, res) => {
   }
 }
 
-const getAll = async (req, res) => {
-  try {
-    const data = await TableService.getAll()
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
 const updateTableStatus = async (req, res) => {
   try {
     const data = await TableService.changeTableStatus(req.params.tableNumber)
@@ -73,46 +63,60 @@ const updateTableStatus = async (req, res) => {
   }
 }
 
-const addNewReservation = async (req, res) => {
-  try {
-    const data = await TableService.addNewReservation(req.params.id, req.body)
+// const addNewReservation = async (req, res) => {
+//   try {
+//     const data = await TableService.addNewReservation(req.params.id, req.body)
+//
+//     res.json(data)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+//   }
+// }
 
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
+// const removeReservation = async (req, res) => {
+//   try {
+//     const { tableNumber, id } = req.params
+//     const data = await TableService.removeReservation(tableNumber, id)
+//
+//     res.json(data)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+//   }
+// }
 
-const removeReservation = async (req, res) => {
-  try {
-    const { tableNumber, id } = req.params
-    const data = await TableService.removeReservation(tableNumber, id)
-
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
-
-const updateReservation = async (req, res) => {
-  try {
-    const data = await TableService.updateReservation(req.params.id, req.body)
-    res.json(data)
-  } catch (err) {
-    res.status(500).json(err.message)
-  }
-}
+// const updateReservation = async (req, res) => {
+//   try {
+//     const data = await TableService.updateReservation(req.params.id, req.body)
+//     res.json(data)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+//   }
+// }
+// const getTableReservationInfo = async (req, res) => {
+//   try {
+//     const data = await TableService.getTableReservationInfo(req.params.tableNumber)
+//     res.json(data)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+//   }
+// }
+//
+// const getReservationBySelectDate = async (req, res) => {
+//   const { id, date } = req.params
+//   try {
+//     const data = await TableService.getReservationBySelectedDate(id, date)
+//     res.json(data)
+//   } catch (err) {
+//     res.status(500).json(err.message)
+//   }
+// }
 
 export const TableController = {
   getFree,
   getTableStatus,
-  getTableReservationInfo,
-  getReservationBySelectDate,
+  getCanvas,
   addNewTable,
   deleteTable,
   getAll,
   updateTableStatus,
-  addNewReservation,
-  removeReservation,
-  updateReservation,
 }
