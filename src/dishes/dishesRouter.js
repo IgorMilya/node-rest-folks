@@ -10,7 +10,7 @@ export const dishesDefaultPath = "/api/dishes";
 dishRouter.post(
   "/",
   uploadImageCloudinaryMiddleware,
-  validateSchema(dishesValidateSchema),
+  // validateSchema(dishesValidateSchema),
   DishesController.create
 );
 dishRouter.get("/", DishesController.getAll);

@@ -12,7 +12,14 @@ const findAll = async ({ skip, perPage, findValues }) => {
     .sort({ updatedAt: -1 })
     .select("-createdAt -updatedAt")
     .populate("additionalFood")
-    .populate("category", "title")
+    .populate("category")
+    .populate({
+      path: "category",
+      populate: {
+        path: "parent",
+        select: "title",
+      },
+    })
     .limit(perPage)
     .skip(skip);
   return { totalCount, data };
@@ -22,7 +29,14 @@ const findByID = async (id) => {
   return DishDB.findById(id)
     .select("-createdAt -updatedAt")
     .populate("additionalFood")
-    .populate("category", "title");
+    .populate("category")
+    .populate({
+      path: "category",
+      populate: {
+        path: "parent",
+        select: "title",
+      },
+    });
 };
 
 const update = async (dish) => {
