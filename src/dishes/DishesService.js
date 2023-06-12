@@ -5,7 +5,7 @@ import { CategoryDAL } from "../categories/CategoriesDAL.js";
 const create = async (dish) => {
   const { category, subcategory, newSubcategory, ...rest } = dish;
   const { _id: categoryID } = await CategoryDAL.findOne(category);
-  console.log(categoryID);
+
   if (newSubcategory && categoryID) {
     const { _id: idSubcategory } = await CategoryDAL.create({
       title: newSubcategory,
