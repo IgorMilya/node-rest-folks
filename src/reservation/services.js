@@ -11,12 +11,22 @@ const getOne = async id => {
   return await ReservationDataAccess.getOne(id)
 }
 
-const getAll = async () => {
-  return await ReservationDataAccess.getAll()
+const getAll = async props => {
+  return await ReservationDataAccess.getAll(props)
+}
+
+const deleteOne = async id => {
+  return await ReservationDataAccess.deleteOne(id)
+}
+
+const update = async body => {
+  return await ReservationDataAccess.update(body)
 }
 
 export const ReservationService = {
   create,
   getOne,
   getAll,
+  update,
+  deleteOne,
 }

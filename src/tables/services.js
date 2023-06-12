@@ -4,7 +4,7 @@ import { ReservationDataAccess } from '../reservation/dataAccess.js'
 
 const getCanvas = async () => {
   const tables = await TablesDataAccess.getAll()
-  const reservations = await ReservationDataAccess.getAll()
+  const reservations = await ReservationDataAccess.getAll({ status: 'active' })
 
   return prepareTablesData(tables, reservations)
 }
