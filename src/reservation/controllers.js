@@ -22,7 +22,17 @@ const getOne = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const data = await ReservationService.getAll(req.body)
+    const data = await ReservationService.getAll()
+
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
+const getByDate = async (req, res) => {
+  try {
+    const data = await ReservationService.getByDate(req.params.date)
 
     res.status(200).json(data)
   } catch (error) {
@@ -54,6 +64,7 @@ export const ReservationController = {
   create,
   getOne,
   getAll,
+  getByDate,
   update,
   deleteOne,
 }

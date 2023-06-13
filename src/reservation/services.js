@@ -1,5 +1,5 @@
 import { ReservationDataAccess } from './dataAccess.js'
-import { prepareReservationInfo } from './utils.js'
+import { getReservationsByDate, prepareReservationInfo } from './utils.js'
 
 const create = async body => {
   const reservation = prepareReservationInfo(body)
@@ -11,8 +11,16 @@ const getOne = async id => {
   return await ReservationDataAccess.getOne(id)
 }
 
-const getAll = async props => {
-  return await ReservationDataAccess.getAll(props)
+const getAll = async () => {
+  return await ReservationDataAccess.getAll()
+}
+
+const getByDate = async date => {
+  const reservations = await ReservationDataAccess.getAll()
+
+  const test = getReservationsByDate(reservations, date)
+
+  return test
 }
 
 const deleteOne = async id => {
@@ -27,6 +35,7 @@ export const ReservationService = {
   create,
   getOne,
   getAll,
+  getByDate,
   update,
   deleteOne,
 }

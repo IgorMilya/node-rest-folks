@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { _logFunc } from 'nodemailer/lib/shared/index.js'
 
 const convertToTimestamp = (date, time) => {
   const datetimeString = `${date} ${time}`
@@ -14,11 +15,21 @@ export const prepareReservationInfo = reservation => {
 }
 
 export const getTodayReservations = reservations => {
-  const today = dayjs().startOf('day')
+  const day = dayjs().startOf('day')
 
   return reservations.filter(({ booking }) => {
     const bookingDate = dayjs.unix(booking)
 
-    return bookingDate.isSame(today, 'day')
+    return bookingDate.isSame(day, 'day')
+  })
+}
+
+export const getReservationsByDate = (reservations, date) => {
+  const day = dayjs(date).startOf('day').format('YYYY-MM-DD')
+
+  return reservations.filter(({ booking }) => {
+    const bookingDate = dayjs.unix(booking).startOf('day').format('YYYY-MM-DD')
+
+    return bookingDate === day
   })
 }

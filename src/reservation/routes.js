@@ -6,6 +6,7 @@ export const reservationDefaultPath = '/api/reservation'
 
 reservationRouter.post('/', ReservationController.create)
 reservationRouter.get('/:id', ReservationController.getOne)
+reservationRouter.get('/date/:date', ReservationController.getByDate)
 reservationRouter.get('/', ReservationController.getAll)
 reservationRouter.put('/', ReservationController.update)
 reservationRouter.delete('/:id', ReservationController.deleteOne)

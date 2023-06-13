@@ -63,54 +63,6 @@ const updateTableStatus = async (req, res) => {
   }
 }
 
-// const addNewReservation = async (req, res) => {
-//   try {
-//     const data = await TableService.addNewReservation(req.params.id, req.body)
-//
-//     res.json(data)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-//   }
-// }
-
-// const removeReservation = async (req, res) => {
-//   try {
-//     const { tableNumber, id } = req.params
-//     const data = await TableService.removeReservation(tableNumber, id)
-//
-//     res.json(data)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-//   }
-// }
-
-// const updateReservation = async (req, res) => {
-//   try {
-//     const data = await TableService.updateReservation(req.params.id, req.body)
-//     res.json(data)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-//   }
-// }
-// const getTableReservationInfo = async (req, res) => {
-//   try {
-//     const data = await TableService.getTableReservationInfo(req.params.tableNumber)
-//     res.json(data)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-//   }
-// }
-//
-// const getReservationBySelectDate = async (req, res) => {
-//   const { id, date } = req.params
-//   try {
-//     const data = await TableService.getReservationBySelectedDate(id, date)
-//     res.json(data)
-//   } catch (err) {
-//     res.status(500).json(err.message)
-//   }
-// }
-
 export const TableController = {
   getFree,
   getTableStatus,
