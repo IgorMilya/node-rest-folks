@@ -30,9 +30,21 @@ export const getBillsDATA = [
         },
     },
     {
+        $unwind: '$userData',
+    },
+    {
+        $addFields: {
+            user: {
+                firstName: '$userData.firstName',
+                secondName: '$userData.secondName',
+            },
+        },
+    },
+    {
         $project: {
             _id: 0,
             ordersData: 0,
+            userData: 0,
             dishes: {
                 _id: 0,
             },
