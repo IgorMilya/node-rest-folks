@@ -30,11 +30,15 @@ export const prepareTablesData = (tables, reservations) => {
           reservation => reservation.table.number === table.number,
         )
         if (reservation) {
+          const { _id, ...rest } = table.toObject()
+
           return {
-            ...table.toObject(),
+            ...rest,
+            id: table.id,
             reservation: {
               id: reservation.id,
-              booking: reservation.booking,
+              date: reservation.date,
+              time: reservation.time,
               persons: reservation.persons,
               clientName: reservation.clientName,
               phoneNumber: reservation.phoneNumber,
@@ -42,7 +46,9 @@ export const prepareTablesData = (tables, reservations) => {
             },
           }
         } else {
-          return table.toObject()
+          const { _id, ...rest } = table.toObject()
+
+          return { ...rest, id: table.id }
         }
       }),
     }
