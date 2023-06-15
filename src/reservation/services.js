@@ -1,10 +1,8 @@
+import dayjs from 'dayjs'
 import { ReservationDataAccess } from './dataAccess.js'
-import { getReservationsByDate, prepareReservationInfo } from './utils.js'
 
 const create = async body => {
-  const reservation = prepareReservationInfo(body)
-
-  return await ReservationDataAccess.create(reservation)
+  return await ReservationDataAccess.create(body)
 }
 
 const getOne = async id => {
@@ -15,12 +13,10 @@ const getAll = async () => {
   return await ReservationDataAccess.getAll()
 }
 
-const getByDate = async date => {
+const getByDate = async data => {
   const reservations = await ReservationDataAccess.getAll()
 
-  const test = getReservationsByDate(reservations, date)
-
-  return test
+  return reservations.filter(({ date }) => dayjs(data).isSame(date))
 }
 
 const deleteOne = async id => {
