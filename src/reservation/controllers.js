@@ -40,6 +40,16 @@ const getByDate = async (req, res) => {
   }
 }
 
+const getInfo = async (req, res) => {
+  try {
+    const data = await ReservationService.getInfo(req.params.table)
+
+    res.status(200).json(data)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+}
+
 const update = async (req, res) => {
   try {
     const data = await ReservationService.update(req.body)
@@ -67,4 +77,5 @@ export const ReservationController = {
   getByDate,
   update,
   deleteOne,
+  getInfo,
 }

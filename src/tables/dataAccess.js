@@ -12,10 +12,6 @@ const deleteTable = async id => Model.findByIdAndDelete(id)
 
 const updateTableInfo = async (id, data) => Model.findByIdAndUpdate(id, data)
 
-// const removeReservation = async (filterField, fieldToRemove) => {
-//   return TableModel.updateOne(filterField, fieldToRemove)
-// }
-
 export const TablesDataAccess = {
   getAll,
   addNew,

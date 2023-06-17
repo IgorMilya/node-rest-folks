@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { ReservationDataAccess } from './dataAccess.js'
+import { getTodayReservations } from './utils.js'
 
 const create = async body => {
   return await ReservationDataAccess.create(body)
@@ -19,6 +20,23 @@ const getByDate = async data => {
   return reservations.filter(({ date }) => dayjs(data).isSame(date))
 }
 
+const getInfo = async tableNumber => {
+  const reservations = await ReservationDataAccess.getAll()
+  const todayReservations = getTodayReservations(reservations)
+  const reservationsTime = todayReservations
+    .filter(reservation => reservation.table.number === tableNumber)
+    .map(({ time }) => time)
+
+  if (reservationsTime.length) {
+    return {
+      message: `Table ${tableNumber} is currently reserved for the following hours:`,
+      reservationsTime,
+    }
+  } else {
+    return { message: 'No reservations for this table', reservationsTime }
+  }
+}
+
 const deleteOne = async id => {
   return await ReservationDataAccess.deleteOne(id)
 }
@@ -34,4 +52,5 @@ export const ReservationService = {
   getByDate,
   update,
   deleteOne,
+  getInfo,
 }
