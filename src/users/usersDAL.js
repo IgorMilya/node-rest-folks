@@ -7,7 +7,7 @@ const create = async ({ user }) => {
 const findAll = async ({ skip, perPage, findValue }) => {
   const totalCount = await UsersModel.countDocuments(findValue);
   const data = await UsersModel.find(findValue)
-    .sort({ createdAt: -1 })
+    .sort({ status: 1 })
     .select("-createdAt -updatedAt")
     .skip(skip)
     .limit(perPage);
