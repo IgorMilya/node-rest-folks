@@ -62,6 +62,10 @@ const sendBill = async id => {
     }
     const [{ email, dishes, totalPrice, orderNumber }] = await BillsDAL.findByID(id);
 
+    if (!email) {
+        throw new Error('email was not added');
+    }
+
     sendEmail({ email, dishes, totalPrice, orderNumber });
     return email;
 };
