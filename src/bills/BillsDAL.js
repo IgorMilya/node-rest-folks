@@ -13,7 +13,7 @@ const findAll = async ({ page, limit, findValue }) => {
             $match: findValue,
         },
         {
-            $sort: { createdAt: -1 },
+            $sort: { status: -1, createdAt: -1 },
         },
         {
             $facet: {
