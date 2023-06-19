@@ -92,7 +92,7 @@ const refresh = async (req, res) => {
 
     res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
-    res.status(500).json(err.message);
+    res.status(err.statusCode || 500).json(err.message);
   }
 };
 
