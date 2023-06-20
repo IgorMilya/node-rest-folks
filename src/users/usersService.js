@@ -124,13 +124,17 @@ const logout = async ({ refreshToken }) => {
 
 const refresh = async ({ refreshToken }) => {
   if (!refreshToken) {
-    throw new Error("You are not logged in");
+    const error = new Error("You are not logged in");
+    error.statusCode = 401;
+    throw error;
   }
   const userTokenData = validateRefreshToken(refreshToken);
   const tokenFromDB = TokenDAL.getOne({ refreshToken });
 
   if (!userTokenData || !tokenFromDB) {
-    throw new Error("You are not logged in");
+    const error = new Error("You are not logged in");
+    error.statusCode = 401;
+    throw error;
   }
 
   const userData = await UserDAL.findByID({ id: userTokenData._id });
