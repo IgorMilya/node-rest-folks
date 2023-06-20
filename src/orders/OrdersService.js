@@ -38,11 +38,8 @@ const update = async order => {
     }
     const totalDishInfo = await findAdditionalFields(order);
 
-    const user = typeof order.user === 'string' ? order.user : new mongoose.Types.ObjectId(order.user.id);
-
     const updateOrder = await OrderDAL.update({
         ...order,
-        user,
         dishes: totalDishInfo,
     });
     return updateOrder;

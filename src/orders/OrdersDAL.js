@@ -9,14 +9,15 @@ const findAll = async ({ page, limit, findValue }) => {
     const data = await OrderDB.find(findValue)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
-        .limit(limit)
-        .populate('user', 'firstName secondName');
+        .limit(limit);
+    // .populate('user', 'firstName secondName');
 
     return { data, totalCount };
 };
 
 const findByID = async id => {
-    return OrderDB.findById(id).populate('user', 'firstName secondName');
+    return OrderDB.findById(id);
+    // .populate('user', 'firstName secondName');
 };
 
 const update = async order => {

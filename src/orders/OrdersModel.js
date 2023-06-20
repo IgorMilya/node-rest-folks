@@ -22,7 +22,7 @@ export const Order = new mongoose.Schema(
         dishes: [dishes],
         description: String,
         totalPrice: Number,
-        user: { type: mongoose.Types.ObjectId, ref: 'user' }, // TODO !not correct type if use obj
+        user: { type: mongoose.Types.ObjectId, ref: 'user' },
     },
     schemaOptionsWithTimestamp
 );
