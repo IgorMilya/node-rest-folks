@@ -12,11 +12,11 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async ({ dishes, email, totalPrice, orderNumber }) => {
-    const dishesView = dishes.map(({ title, price, amount }) => `<li>${title} .....${price}$ quantity: ${amount} ....${price * amount}$ </li>`);
+    const dishesView = dishes.map(({ title, price, amount }) => `<li>${title} .....${amount} x ${price}$ ....${price * amount}$ </li>`);
     await transporter.sendMail({
         from: SMTP_USER,
         to: email,
-        subject: 'Your bills from coca ✔',
+        subject: 'Your bills from FOLKS ✔',
         text: '',
         html: `<span>Hello, dear Customer. There is your bill #${orderNumber}</span>
         <ul>${dishesView}</ul>
@@ -30,7 +30,7 @@ export const sendEmailRegistration = async ({ email, firstName, secondName, pass
     await transporter.sendMail({
         from: SMTP_USER,
         to: email,
-        subject: 'Your Registration from coca ✔',
+        subject: 'Your Registration from FOLKS ✔',
         text: '',
         html: `<span>Hello, Dear ${firstName} ${secondName}. There is your registration success, your password: ${password}</span>
       

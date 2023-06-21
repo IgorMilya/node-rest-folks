@@ -6,13 +6,9 @@ const create = async delivery => {
 };
 
 const getAll = async query => {
-    // if (query.orderType) {
-    //     query.orderType = { $in: query.orderType?.split(',') };
-    // }
+    const { page, limit, ...paramsQuery } = query;
 
-    // const { page, limit, ...paramsQuery } = query;
-
-    // const findValue = { $and: [paramsQuery] };
+    const findValue = {};
 
     const deliveries = await DeliveryDAL.findAll({ page, limit, findValue });
     return deliveries;

@@ -6,10 +6,13 @@ const create = async delivery => {
 
 const findAll = async ({ page, limit, findValue }) => {
     const totalCount = await DeliveryDB.countDocuments(findValue);
+
     const data = await DeliveryDB.find(findValue)
-        .sort({ createdAt: -1 })
+        .sort({ statusPriority: 1, createdAt: -1 })
         .skip((page - 1) * limit)
-        .limit(limit);
+        .limit(limit)
+        .populate('courier', 'firstName secondName')
+        .populate('order', 'dishes description orderNumber');
     return { data, totalCount };
 };
 
@@ -21,10 +24,6 @@ const update = async delivery => {
     return DeliveryDB.findByIdAndUpdate(delivery.id, delivery, { new: true });
 };
 
-const updateStatus = async id => {
-    return DeliveryDB.findByIdAndUpdate(id, { status: 'closed' }, { new: true });
-};
-
 const deleteDelivery = async id => {
     return DeliveryDB.findByIdAndDelete(id);
 };
@@ -34,6 +33,5 @@ export const DeliveryDAL = {
     findAll,
     findByID,
     update,
-    updateStatus,
     deleteDelivery,
 };

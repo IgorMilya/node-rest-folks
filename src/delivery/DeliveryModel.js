@@ -6,8 +6,12 @@ export const Delivery = new mongoose.Schema(
         customerName: { type: String, required: true },
         courier: { type: mongoose.Types.ObjectId, ref: 'user' },
         status: { type: String, default: 'opened' },
+        statusPriority: {
+            type: Number,
+            enum: [1, 2, 3],
+        },
         time: Number,
-        orderID: { type: mongoose.Types.ObjectId, ref: 'OrderDB' },
+        order: { type: mongoose.Types.ObjectId, ref: 'OrderDB' },
         paymentMethod: String,
         address: {
             city: String,
@@ -19,5 +23,18 @@ export const Delivery = new mongoose.Schema(
     },
     schemaOptionsWithTimestamp
 );
+
+Delivery.pre('save', function (next) {
+    if (this.status === 'opened') {
+        this.statusPriority = 1;
+    } else if (this.status === 'delivering') {
+        this.statusPriority = 2;
+    } else if (this.status === 'closed') {
+        this.statusPriority = 3;
+    } else if (this.status === 'rejected') {
+        this.statusPriority = 4;
+    }
+    next();
+});
 
 export default mongoose.model('DeliveryDB', Delivery, 'delivery');
