@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD } from '../config/config.js';
+import { billEmail } from './emailTemplates.js';
 
 const transporter = nodemailer.createTransport({
     host: SMTP_HOST,
@@ -12,16 +13,12 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async ({ dishes, email, totalPrice, orderNumber }) => {
-    const dishesView = dishes.map(({ title, price, amount }) => `<li>${title} .....${amount} x ${price}$ ....${price * amount}$ </li>`);
     await transporter.sendMail({
         from: SMTP_USER,
         to: email,
         subject: 'Your bills from FOLKS ✔',
         text: '',
-        html: `<span>Hello, dear Customer. There is your bill #${orderNumber}</span>
-        <ul>${dishesView}</ul>
-        <hr>
-        <div style="text-align: right">TOTAL:  ${totalPrice}$</div>
+        html: `${billEmail({ dishes, email, totalPrice, orderNumber })}}
         `,
     });
 };
