@@ -1,6 +1,7 @@
 export const billEmail = ({ totalPrice, orderNumber, dishes }) => {
-    const dishesView = dishes.map(
-        ({ title, price, amount }) => `
+    const dishesView = dishes
+        .map(
+            ({ title, price, amount }) => `
     <tr>
     <td>${title}</td>
     <td>${amount}</td>
@@ -8,7 +9,8 @@ export const billEmail = ({ totalPrice, orderNumber, dishes }) => {
     <td>${amount * price}$</td>
   </tr>    
     `
-    );
+        )
+        .join('');
 
     return `
     <!DOCTYPE html>
