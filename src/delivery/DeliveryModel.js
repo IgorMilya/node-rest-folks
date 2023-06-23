@@ -4,7 +4,7 @@ import { schemaOptionsWithTimestamp } from '../utils/schemaOptions.js';
 export const Delivery = new mongoose.Schema(
     {
         status: { type: String, default: 'opened' },
-        order: { type: mongoose.Types.ObjectId, ref: 'OrderDB', required: true },
+        order: { type: mongoose.Types.ObjectId, ref: 'OrderDB' },
         time: { type: Number, required: true },
         clientInfo: {
             name: { type: String, required: true },
