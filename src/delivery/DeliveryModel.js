@@ -3,23 +3,28 @@ import { schemaOptionsWithTimestamp } from '../utils/schemaOptions.js';
 
 export const Delivery = new mongoose.Schema(
     {
-        customerName: { type: String, required: true },
-        courier: { type: mongoose.Types.ObjectId, ref: 'user' },
         status: { type: String, default: 'opened' },
+        order: { type: mongoose.Types.ObjectId, ref: 'OrderDB', required: true },
+        time: { type: Number, required: true },
+        clientInfo: {
+            name: { type: String, required: true },
+            phoneNumber: { type: String, required: true },
+            paymentMethod: { type: String, required: true },
+            email: String,
+            description: String,
+        },
+        courier: { type: mongoose.Types.ObjectId, ref: 'user' },
         statusPriority: {
             type: Number,
-            enum: [1, 2, 3],
+            enum: [1, 2, 3, 4],
         },
-        time: Number,
-        order: { type: mongoose.Types.ObjectId, ref: 'OrderDB' },
-        paymentMethod: String,
+
         address: {
             city: String,
-            street: String,
-            house: String,
-            flat: String,
+            street: { type: String, required: true },
+            house: { type: String, required: true },
+            apartment: String,
         },
-        phoneNumber: String,
     },
     schemaOptionsWithTimestamp
 );
@@ -29,7 +34,7 @@ Delivery.pre('save', function (next) {
         this.statusPriority = 1;
     } else if (this.status === 'delivering') {
         this.statusPriority = 2;
-    } else if (this.status === 'closed') {
+    } else if (this.status === 'done') {
         this.statusPriority = 3;
     } else if (this.status === 'rejected') {
         this.statusPriority = 4;

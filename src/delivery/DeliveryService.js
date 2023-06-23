@@ -6,11 +6,9 @@ const create = async delivery => {
 };
 
 const getAll = async query => {
-    const { page, limit, ...paramsQuery } = query;
+    const { page, limit } = query;
 
-    const findValue = {};
-
-    const deliveries = await DeliveryDAL.findAll({ page, limit, findValue });
+    const deliveries = await DeliveryDAL.findAll({ page, limit });
     return deliveries;
 };
 
