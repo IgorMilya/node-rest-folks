@@ -10,8 +10,9 @@ import { billsDefaultPath, billsRouter } from './src/bills/billsRouter.js';
 import { userDefaultPath, usersRouter } from './src/users/usersRouter.js';
 import { reservationDefaultPath, reservationRouter } from './src/reservation/routes.js';
 import { deliveryDefaultPath, deliveryRouter } from './src/delivery/deliveryRouter.js';
-
 import { staticDefaultPath, staticRouter } from './static/routes.js';
+
+import { startBot } from './src/bot/telegramBot.js';
 
 export const app = express();
 
@@ -35,3 +36,5 @@ app.use(billsDefaultPath, billsRouter);
 app.use(reservationDefaultPath, reservationRouter);
 app.use(userDefaultPath, usersRouter);
 app.use(deliveryDefaultPath, deliveryRouter);
+
+startBot();

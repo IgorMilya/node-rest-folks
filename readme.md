@@ -249,3 +249,23 @@ or
 #### example request http://localhost:5001/api/bills/645e2c4a66bbb2ae16af76e3 - DELETE - get one bill by id
 
 #### example request send bills to email - http://localhost:5001/api/bills/send/647a68a7771be4d87ba4b2e0
+
+## DELIVERY
+
+#### example request http://localhost:5001/api/delivery - GET - get all deliveries
+
+#### example request http://localhost:5001/api/delivery/646fb293a608de2216974150- GET - get one delivery by id
+
+#### example request http://localhost:5001/api/delivery - POST - create one delivery
+
+#### example request http://localhost:5001/api/delivery - PUT - update one delivery
+
+#### example request http://localhost:5001/api/delivery/645e2c4a66bbb2ae16af76e3 - DELETE - get one delivery by id
+
+#### example request send message to telegram - http://localhost:5001/api/delivery/send/64974cf249d97e2d3739d1d1
+
+##### possible answer : "message to 380983648252 was sent" // "the client`s number was not found in telegram DB"
+
+##### !!!!!!!!! client have to share his / her contact
+
+##### https://t.me/FoodDashBot

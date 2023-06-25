@@ -1,4 +1,5 @@
 import { DeliveryDAL } from './DeliveryDAL.js';
+import { sendDEliveredMsg } from '../bot/telegramBot.js';
 
 const create = async delivery => {
     const createdDelivery = await DeliveryDAL.create(delivery);
@@ -38,10 +39,30 @@ const deleteDelivery = async id => {
     return delivery;
 };
 
+const sendMsg = async id => {
+    if (!id) {
+        throw new Error('ID was not set');
+    }
+    const { clientInfo } = await DeliveryDAL.findByID(id);
+    const { phoneNumber, name } = clientInfo;
+
+    if (!phoneNumber) {
+        throw new Error('phoneNumber was not added');
+    }
+
+    try {
+        await sendDEliveredMsg({ phoneNumber, name });
+        return phoneNumber;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
 export const DeliveryService = {
     create,
     getAll,
     getOne,
     update,
     deleteDelivery,
+    sendMsg,
 };

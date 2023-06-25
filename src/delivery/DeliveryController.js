@@ -48,10 +48,21 @@ const deleteDelivery = async (req, res) => {
     }
 };
 
+const sendMsg = async (req, res) => {
+    try {
+        const phoneNumber = await DeliveryService.sendMsg(req.params.id);
+
+        return res.json(`message to ${phoneNumber} was sent`);
+    } catch (e) {
+        res.status(500).json(e.message);
+    }
+};
+
 export const DeliveryController = {
     create,
     getAll,
     getOne,
     update,
     deleteDelivery,
+    sendMsg,
 };
