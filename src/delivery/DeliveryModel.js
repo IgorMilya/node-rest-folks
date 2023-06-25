@@ -22,7 +22,6 @@ export const Delivery = new mongoose.Schema(
         address: {
             city: String,
             street: { type: String, required: true },
-            house: { type: String, required: true },
             apartment: String,
         },
     },
