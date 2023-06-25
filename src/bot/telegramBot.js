@@ -2,6 +2,7 @@ import TelegramAPI from 'node-telegram-bot-api';
 import { TELEGRAM_TOKEN as token } from '../config/config.js';
 import { TelegaClientService } from './TelegaClientService.js';
 import { getClientInfo } from './utils.js';
+import { createError } from '../utils/error.js';
 
 const bot = new TelegramAPI(token, { polling: true });
 
@@ -49,9 +50,9 @@ export const startBot = () => {
         try {
             await TelegaClientService.update({ nickname, userId, phoneNumber });
 
-            return bot.sendMessage(chatId, 'Thanks');
+            return bot.sendMessage(userId, 'Thanks');
         } catch (error) {
-            return bot.sendMessage(chatId, `Something went wrong`);
+            return bot.sendMessage(userId, `Something went wrong`);
         }
     });
 };
@@ -62,8 +63,8 @@ export const sendDEliveredMsg = async ({ phoneNumber, name }) => {
     try {
         const [{ userId, name: tgName }] = client;
         const username = name || tgName;
-        return bot.sendMessage(userId, ` ${username}, Your order has delivered.`);
+        return bot.sendMessage(userId, ` ${username}, your order is going to be delivered soon.`);
     } catch (error) {
-        throw new Error('the client`s number was not found in telegram DB');
+        throw createError('the client`s number was not found in telegram DB', 404);
     }
 };

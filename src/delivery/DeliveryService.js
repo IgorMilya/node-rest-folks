@@ -1,5 +1,6 @@
 import { DeliveryDAL } from './DeliveryDAL.js';
 import { sendDEliveredMsg } from '../bot/telegramBot.js';
+import { createError } from '../utils/error.js';
 
 const create = async delivery => {
     const createdDelivery = await DeliveryDAL.create(delivery);
@@ -54,6 +55,9 @@ const sendMsg = async id => {
         await sendDEliveredMsg({ phoneNumber, name });
         return phoneNumber;
     } catch (error) {
+        if (!!error.statusCode) {
+            throw createError(error.message, error.statusCode);
+        }
         throw new Error(error.message);
     }
 };

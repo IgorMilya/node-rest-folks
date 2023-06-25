@@ -54,7 +54,7 @@ const sendMsg = async (req, res) => {
 
         return res.json(`message to ${phoneNumber} was sent`);
     } catch (e) {
-        res.status(500).json(e.message);
+        res.status(e.statusCode || 500).json(e.message);
     }
 };
 
