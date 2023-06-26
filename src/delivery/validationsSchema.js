@@ -14,8 +14,8 @@ export const deliveryValidateSchema = Joi.object({
     courier: Joi.string(),
     statusPriority: Joi.number().integer(),
     address: {
-        city: Joi.string(),
         street: Joi.string().required(),
-        apartment: Joi.number().integer().positive(),
+        latitude: Joi.number(),
+        longitude: Joi.number(),
     },
 });
