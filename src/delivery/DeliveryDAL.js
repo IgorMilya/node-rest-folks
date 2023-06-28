@@ -1,38 +1,49 @@
-import DeliveryDB from './DeliveryModel.js';
+import DeliveryDB from "./DeliveryModel.js";
 
-const create = async delivery => {
-    return DeliveryDB.create(delivery);
+const create = async (delivery) => {
+  return DeliveryDB.create(delivery);
 };
 
-const findAll = async ({ page, limit }) => {
-    const totalCount = await DeliveryDB.countDocuments();
+const findAll = async ({ page, limit, findValue }) => {
+  const totalCount = await DeliveryDB.countDocuments(findValue);
 
-    const data = await DeliveryDB.find()
-        .sort({ statusPriority: 1, createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .select('-statusPriority')
-        .populate('courier', 'firstName secondName')
-        .populate('order', 'dishes description orderNumber');
-    return { data, totalCount };
+  const data = await DeliveryDB.find(findValue)
+    .sort({ time: 1 })
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .select("-createdAt -updatedAt")
+    .populate("courier", "firstName secondName")
+    .populate("order", "dishes description orderNumber status");
+  return { data, totalCount };
 };
 
-const findByID = async id => {
-    return DeliveryDB.findById(id).select('-statusPriority').populate('courier', 'firstName secondName').populate('order', 'dishes description orderNumber');
+const findByID = async (id) => {
+  return DeliveryDB.findById(id)
+    .select("-createdAt -updatedAt")
+    .populate("courier", "firstName secondName")
+    .populate("order", "dishes description orderNumber status");
 };
 
-const update = async delivery => {
-    return DeliveryDB.findByIdAndUpdate(delivery.id, delivery, { new: true });
+const update = async (delivery) => {
+  if (!delivery.courier) {
+    delivery.$unset = { courier: 1 };
+  }
+
+  return DeliveryDB.findByIdAndUpdate(delivery.id, delivery, { new: true });
 };
 
-const deleteDelivery = async id => {
-    return DeliveryDB.findByIdAndDelete(id);
+const updateOne = async ({ find, data }) => {
+  return DeliveryDB.findOneAndUpdate(find, data, { new: true });
+};
+const deleteDelivery = async (id) => {
+  return DeliveryDB.findByIdAndDelete(id);
 };
 
 export const DeliveryDAL = {
-    create,
-    findAll,
-    findByID,
-    update,
-    deleteDelivery,
+  create,
+  findAll,
+  findByID,
+  updateOne,
+  update,
+  deleteDelivery,
 };
