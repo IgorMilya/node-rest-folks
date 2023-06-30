@@ -11,7 +11,7 @@ const create = async (delivery) => {
 const getAll = async (query) => {
   const { page, limit, ...rest } = query;
 
-  const findValue = { courier: { $exists: false } };
+  const findValue = { courier: { $exists: false }, status: "opened" };
 
   if (rest.status && rest.courier) {
     findValue.courier = rest.courier;
