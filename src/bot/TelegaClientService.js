@@ -2,6 +2,7 @@ import { TelegaClientDAL } from './TelegaClientDAL.js';
 
 const create = async clientInfo => {
     const createdClientItem = await TelegaClientDAL.create(clientInfo);
+    console.log(createdClientItem);
     return createdClientItem;
 };
 
