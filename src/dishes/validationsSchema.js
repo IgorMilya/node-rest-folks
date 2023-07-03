@@ -7,10 +7,9 @@ export const dishesValidateSchema = Joi.object({
   picture: Joi.string(),
   description: Joi.string().min(10),
   category: Joi.string().min(3),
+  subcategory: Joi.string().min(3),
   weight: Joi.number().required().positive(),
-  status: Joi.string()
-    .required()
-    .pattern(/^active|inactive$/),
+  status: Joi.string().pattern(/^active|inactive$/),
   bonus: Joi.number().positive(),
-  additionalFood: Joi.array().items(Joi.string().required().min(3)),
+  additionalFood: Joi.array().items(Joi.string().min(3)),
 });
