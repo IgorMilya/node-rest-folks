@@ -43,11 +43,7 @@ const update = async (req, res) => {
 
 const registration = async (req, res) => {
   try {
-    if (req.body.picture) {
-      req.body.userImage = req.body.picture;
-      delete req.body.picture;
-    }
-    const data = await UserService.registration(req?.body);
+    await UserService.registration(req?.body, req?.authUser);
 
     res.json({ data: "Registration success" });
   } catch (err) {

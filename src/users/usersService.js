@@ -53,39 +53,44 @@ const update = async ({ id, updateData }) => {
   return UserDAL.findByID({ id });
 };
 
-const registration = async (user) => {
-  try {
-    const isHashPassword = JSON.stringify(user.password);
+const registration = async (user, authUser) => {
+  if (authUser.role === "Admin") {
+    try {
+      const isHashPassword = JSON.stringify(user.password);
 
-    user.password = await bcrypt.hash(user.password, 3);
+      user.password = await bcrypt.hash(user.password, 3);
 
-    const data = await UserDAL.create({ user });
-    const { password, ...userData } = data._doc;
-    const tokens = generateTokens({
-      payload: userData,
-      role: userData.role,
-    });
+      if (user.picture) {
+        user.userImage = user.picture;
+        delete user.picture;
+      }
 
-    if (userData.email) {
-      const { email, firstName, secondName } = userData;
-      await sendEmailRegistration({
-        email,
-        firstName,
-        secondName,
-        password: isHashPassword,
+      const data = await UserDAL.create({ user });
+      const { password, ...userData } = data._doc;
+      const tokens = generateTokens(userData);
+
+      if (userData.email) {
+        const { email, firstName, secondName } = userData;
+        await sendEmailRegistration({
+          email,
+          firstName,
+          secondName,
+          password: isHashPassword,
+        });
+      }
+      await TokenDAL.create({
+        user: data._id,
+        refreshToken: tokens.refreshToken,
       });
+      return {
+        ...tokens,
+        data,
+      };
+    } catch (err) {
+      throw new Error("An unknown error occurred");
     }
-    await TokenDAL.create({
-      user: data._id,
-      refreshToken: tokens.refreshToken,
-    });
-
-    return {
-      ...tokens,
-      data,
-    };
-  } catch (err) {
-    throw new Error("An unknown error occurred");
+  } else {
+    throw new Error("Access denied");
   }
 };
 
@@ -98,7 +103,7 @@ const login = async ({ userId, password }) => {
     if (isPasswordEqual) {
       const { password, ...userData } = data._doc;
 
-      const tokens = generateTokens({ payload: userData, role: userData.role });
+      const tokens = generateTokens(userData);
 
       await TokenDAL.create({
         user: data._id,
@@ -139,7 +144,7 @@ const refresh = async ({ refreshToken }) => {
 
   const userData = await UserDAL.findByID({ id: userTokenData._id });
   const { password, ...data } = userData._doc;
-  const tokens = generateTokens({ payload: data, role: data.role });
+  const tokens = generateTokens(data);
 
   await TokenDAL.update({
     user: data.id,

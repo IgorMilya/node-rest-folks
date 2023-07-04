@@ -23,13 +23,14 @@ export const authMiddlewareAccessToken = async (req, res, next) => {
       throw new Error("No access, not authorized");
     }
 
-    req.user = userData;
+    req.authUser = userData;
 
     next();
   } catch (err) {
     res.status(401).json({ message: "No access, not authorized" });
   }
 };
+
 export const authMiddlewareRefreshToken = async (req, res, next) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -44,7 +45,7 @@ export const authMiddlewareRefreshToken = async (req, res, next) => {
       throw new Error("No access, not authorized");
     }
 
-    req.user = userData;
+    req.authUser = userData;
 
     next();
   } catch (err) {
