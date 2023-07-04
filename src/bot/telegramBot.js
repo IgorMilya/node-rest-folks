@@ -21,7 +21,7 @@ export const startBot = () => {
 
         try {
             const client = await TelegaClientService.find({ nickname });
-            !client.length && (await TelegaClientService.create({ chatId, name, nickname }));
+            !client?.length && (await TelegaClientService.create({ chatId, name, nickname }));
 
             if (text === '/start') {
                 return bot.sendMessage(chatId, `Hey, ${name || nickname}, please share you phone number`, getClientInfo);
