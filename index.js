@@ -22,6 +22,10 @@ import {
 import { staticDefaultPath, staticRouter } from "./static/routes.js";
 
 import { startBot } from "./src/bot/telegramBot.js";
+import {
+  analyticsDefaultPath,
+  analyticsRouter,
+} from "./src/analytics/routes.js";
 
 export const app = express();
 
@@ -48,5 +52,6 @@ app.use(billsDefaultPath, billsRouter);
 app.use(reservationDefaultPath, reservationRouter);
 app.use(userDefaultPath, usersRouter);
 app.use(deliveryDefaultPath, deliveryRouter);
+app.use(analyticsDefaultPath, analyticsRouter);
 
 startBot();

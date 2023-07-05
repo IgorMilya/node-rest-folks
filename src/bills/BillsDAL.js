@@ -56,10 +56,29 @@ const deleteBill = async (id) => {
   return BillDB.findByIdAndDelete(id);
 };
 
+const find = async ({ find, field }) => {
+  return BillDB.find(find, field).populate({
+    path: "orderID",
+    populate: {
+      path: "dishes",
+      populate: {
+        path: "dishID",
+        select: "category",
+      },
+    },
+  });
+};
+
+const findAggregate = async (aggregateSchema) => {
+  return BillDB.aggregate(aggregateSchema);
+};
+
 export const BillsDAL = {
   create,
   findAll,
   findByID,
   update,
   deleteBill,
+  find,
+  findAggregate,
 };

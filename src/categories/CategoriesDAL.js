@@ -19,8 +19,12 @@ const findOne = async (category, field) => {
 const findByOne = async (findValue) => {
   return CategoryDB.findOne(findValue);
 };
-const find = async (findValue) => {
-  return CategoryDB.find(findValue);
+const find = async (findValue, populate) => {
+  const findData = CategoryDB.find(findValue);
+  if (populate) {
+    findData.populate(populate);
+  }
+  return findData;
 };
 
 const update = async (category) => {
