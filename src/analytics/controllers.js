@@ -26,8 +26,18 @@ const generalTotal = async (req, res) => {
   }
 };
 
+const orderTypeTotal = async (req, res) => {
+  try {
+    const data = await AnalyticsServices.orderTypeTotal(req.query);
+    return res.json(data);
+  } catch (e) {
+    res.status(e.statusCode || 500).json(e.message);
+  }
+};
+
 export const AnalyticsControllers = {
   getTopSalesCategory,
   general,
   generalTotal,
+  orderTypeTotal,
 };

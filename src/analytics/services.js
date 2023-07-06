@@ -1,21 +1,24 @@
 import { CategoryDAL } from "../categories/CategoriesDAL.js";
 import { BillsDAL } from "../bills/BillsDAL.js";
-import { _logFunc } from "nodemailer/lib/shared/index.js";
 import {
-  aggregateDishes,
-  aggregateDishesTime,
-  aggregateRangeMonth,
-  aggregateRangeQuarter,
   compareCancellationPercentage,
   filterWithCategory,
   generatedAmountDishes,
   generatedAmountDishesByParentCategory,
+  generatedDate,
   percentageCancelAllCount,
   percentageChange,
 } from "./utils.js";
 import dayjs from "dayjs";
 import { OrderDAL } from "../orders/OrdersDAL.js";
 import { createError } from "../utils/error.js";
+import {
+  aggregateRangeDayInMonth,
+  aggregateDishes,
+  aggregateRangeYearInMonth,
+  aggregateDishesTime,
+  aggregateRangeOrderType,
+} from "./aggregate.utils.js";
 
 const getTopSalesCategory = async ({ category }) => {
   const parentCategory = await CategoryDAL.findByOne({ _id: category });
@@ -168,12 +171,13 @@ const general = async () => {
 };
 
 const generalTotal = async ({ period }) => {
-  const today = dayjs();
-  const startOfMonth = today.startOf("month");
-  const endOfMonth = today.endOf("month");
-  const startOfPreviousMonth = today.subtract(2, "month").startOf("month");
-  const startOfYear = today.startOf("year");
-  const endOfYear = today.endOf("year");
+  const {
+    startOfMonth,
+    endOfMonth,
+    startOfQuarterMonth,
+    startOfYear,
+    endOfYear,
+  } = generatedDate();
 
   if (!period) {
     const allDatesArray = Array.from(
@@ -182,7 +186,7 @@ const generalTotal = async ({ period }) => {
     );
 
     const result = await BillsDAL.findAggregate(
-      aggregateRangeMonth({
+      aggregateRangeDayInMonth({
         dayFrom: startOfMonth.toDate(),
         dayTo: endOfMonth.toDate(),
         status: "closed",
@@ -210,8 +214,8 @@ const generalTotal = async ({ period }) => {
     );
 
     const result = await BillsDAL.findAggregate(
-      aggregateRangeQuarter({
-        dayFrom: startOfPreviousMonth.toDate(),
+      aggregateRangeYearInMonth({
+        dayFrom: startOfQuarterMonth.toDate(),
         dayTo: endOfMonth.toDate(),
         status: "closed",
       })
@@ -240,7 +244,7 @@ const generalTotal = async ({ period }) => {
     );
 
     const result = await BillsDAL.findAggregate(
-      aggregateRangeQuarter({
+      aggregateRangeYearInMonth({
         dayFrom: startOfYear.toDate(),
         dayTo: endOfYear.toDate(),
         status: "closed",
@@ -269,8 +273,71 @@ const generalTotal = async ({ period }) => {
   throw createError("Not data found", 404);
 };
 
+const orderTypeDataInRange = async ({ dayFrom, dayTo, status }) => {
+  const data = {
+    labels: ["Dine In", "Take Away", "Delivery"],
+    datasets: [
+      {
+        label: "Total",
+        data: [],
+      },
+    ],
+  };
+
+  const orderTypeMap = ["dineIn", "takeAway", "delivery"];
+
+  const dataOrderType = await OrderDAL.findAggregate(
+    aggregateRangeOrderType({
+      dayFrom,
+      dayTo,
+      status,
+    })
+  );
+
+  orderTypeMap.forEach((orderType) => {
+    const resultItem = dataOrderType.find((item) => item._id === orderType);
+    data.datasets[0].data.push(resultItem ? resultItem.totalPriceAll : 0);
+  });
+
+  return data;
+};
+
+const orderTypeTotal = async ({ period }) => {
+  const {
+    startOfMonth,
+    endOfMonth,
+    startOfQuarterMonth,
+    startOfYear,
+    endOfYear,
+  } = generatedDate();
+
+  if (!period) {
+    return orderTypeDataInRange({
+      dayFrom: startOfMonth.toDate(),
+      dayTo: endOfMonth.toDate(),
+      status: "closed",
+    });
+  }
+  if (period === "quarter") {
+    return orderTypeDataInRange({
+      dayFrom: startOfQuarterMonth.toDate(),
+      dayTo: endOfMonth.toDate(),
+      status: "closed",
+    });
+  }
+  if (period === "year") {
+    return orderTypeDataInRange({
+      dayFrom: startOfYear.toDate(),
+      dayTo: endOfYear.toDate(),
+      status: "closed",
+    });
+  }
+  throw createError("Not data found", 404);
+};
+
 export const AnalyticsServices = {
   getTopSalesCategory,
   general,
   generalTotal,
+  orderTypeTotal,
 };

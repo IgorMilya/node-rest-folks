@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const filterWithCategory = (dishes, arrayCategory) => {
   return dishes.filter((dish) =>
     arrayCategory.includes(dish.category.id.toString())
@@ -105,149 +107,20 @@ export const compareCancellationPercentage = ({
   return currentMonthPercentage - previousMonthPercentage;
 };
 
-export const aggregateDishes = [
-  {
-    $lookup: {
-      from: "orders",
-      localField: "orderID",
-      foreignField: "_id",
-      as: "orderData",
-    },
-  },
-  {
-    $unwind: "$orderData",
-  },
-  {
-    $project: {
-      dishes: "$orderData.dishes",
-    },
-  },
-  {
-    $unwind: "$dishes",
-  },
-  {
-    $lookup: {
-      from: "dishes",
-      localField: "dishes.dishID",
-      foreignField: "_id",
-      as: "dishData",
-    },
-  },
-  {
-    $unwind: "$dishData",
-  },
-  {
-    $lookup: {
-      from: "categories",
-      localField: "dishData.category",
-      foreignField: "_id",
-      as: "categories",
-    },
-  },
-  {
-    $lookup: {
-      from: "categories",
-      localField: "categories.parent",
-      foreignField: "_id",
-      as: "parentCategory",
-    },
-  },
-  {
-    $project: {
-      category: {
-        id: "$dishData.category",
-        title: { $arrayElemAt: ["$categories.title", 0] },
-        parent: {
-          id: { $arrayElemAt: ["$parentCategory._id", 0] },
-          title: { $arrayElemAt: ["$parentCategory.title", 0] },
-        },
-      },
-      amount: "$dishes.amount",
-      title: "$dishes.title",
-    },
-  },
-];
+export const generatedDate = () => {
+  const today = dayjs();
+  const startOfMonth = today.startOf("month");
+  const endOfMonth = today.endOf("month");
+  const startOfQuarterMonth = today.subtract(2, "month").startOf("month");
+  const startOfYear = today.startOf("year");
+  const endOfYear = today.endOf("year");
 
-export const aggregateDishesTime = ({ dayFrom, dayTo, status }) => {
-  return [
-    {
-      $match: {
-        $and: [
-          {
-            createdAt: {
-              $gte: dayFrom,
-              $lte: dayTo,
-            },
-          },
-          {
-            status,
-          },
-        ],
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        totalPriceAll: { $sum: "$totalPrice" },
-        totalCount: { $sum: 1 },
-      },
-    },
-  ];
-};
-
-export const aggregateRangeMonth = ({ dayFrom, dayTo, status }) => {
-  return [
-    {
-      $match: {
-        $and: [
-          {
-            createdAt: {
-              $gte: dayFrom,
-              $lte: dayTo,
-            },
-          },
-          {
-            status,
-          },
-        ],
-      },
-    },
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-        totalPriceAll: { $sum: "$totalPrice" },
-      },
-    },
-    {
-      $sort: {
-        _id: 1,
-      },
-    },
-  ];
-};
-
-export const aggregateRangeQuarter = ({ dayFrom, dayTo, status }) => {
-  return [
-    {
-      $match: {
-        $and: [
-          {
-            createdAt: {
-              $gte: dayFrom,
-              $lte: dayTo,
-            },
-          },
-          {
-            status,
-          },
-        ],
-      },
-    },
-    {
-      $group: {
-        _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
-        totalPriceAll: { $sum: "$totalPrice" },
-      },
-    },
-  ];
+  return {
+    today,
+    startOfMonth,
+    endOfMonth,
+    startOfQuarterMonth,
+    startOfYear,
+    endOfYear,
+  };
 };
