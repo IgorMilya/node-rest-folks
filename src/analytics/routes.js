@@ -12,3 +12,4 @@ analyticsRouter.get(
 analyticsRouter.get("/general", AnalyticsControllers.general);
 
 analyticsRouter.get("/general-total", AnalyticsControllers.generalTotal);
+analyticsRouter.get("/order-type-total", AnalyticsControllers.orderTypeTotal);
