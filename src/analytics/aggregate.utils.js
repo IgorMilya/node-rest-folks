@@ -1,5 +1,10 @@
 export const aggregateDishes = [
   {
+    $match: {
+      status: "closed",
+    },
+  },
+  {
     $lookup: {
       from: "orders",
       localField: "orderID",
