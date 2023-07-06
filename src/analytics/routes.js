@@ -9,4 +9,6 @@ analyticsRouter.get(
   AnalyticsControllers.getTopSalesCategory
 );
 
-analyticsRouter.get("/general-analytics");
+analyticsRouter.get("/general", AnalyticsControllers.general);
+
+analyticsRouter.get("/general-total", AnalyticsControllers.generalTotal);

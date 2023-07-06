@@ -3,10 +3,19 @@ import { BillsDAL } from "../bills/BillsDAL.js";
 import { _logFunc } from "nodemailer/lib/shared/index.js";
 import {
   aggregateDishes,
+  aggregateDishesTime,
+  aggregateRangeMonth,
+  aggregateRangeQuarter,
+  compareCancellationPercentage,
   filterWithCategory,
   generatedAmountDishes,
   generatedAmountDishesByParentCategory,
+  percentageCancelAllCount,
+  percentageChange,
 } from "./utils.js";
+import dayjs from "dayjs";
+import { OrderDAL } from "../orders/OrdersDAL.js";
+import { createError } from "../utils/error.js";
 
 const getTopSalesCategory = async ({ category }) => {
   const parentCategory = await CategoryDAL.findByOne({ _id: category });
@@ -31,8 +40,237 @@ const getTopSalesCategory = async ({ category }) => {
   return categoriesAnalytics;
 };
 
-const generalAnalytics = async () => {};
+const billsTotalPriceAndCountWithRange = async ({ dayFrom, dayTo, status }) => {
+  const data = await BillsDAL.findAggregate(
+    aggregateDishesTime({ dayFrom, dayTo, status })
+  );
+
+  return data.length ? data[0] : [];
+};
+const ordersTotalPriceAndCountWithRange = async ({
+  dayFrom,
+  dayTo,
+  status,
+}) => {
+  const data = await OrderDAL.findAggregate(
+    aggregateDishesTime({ dayFrom, dayTo, status })
+  );
+
+  return data.length ? data[0] : [];
+};
+
+const general = async () => {
+  const today = dayjs();
+
+  const morning = today.startOf("day").toDate();
+  const night = today.endOf("day").toDate();
+
+  const startOfMonth = today.startOf("month").toDate();
+  const endOfMonth = today.endOf("month").toDate();
+
+  const yesterday = dayjs().subtract(1, "day").endOf("day").toDate();
+  const sevenDaysAgo = dayjs().subtract(6, "day").startOf("day").toDate();
+
+  const previousMonth = today.subtract(1, "month");
+  const startPreviousOfMonth = previousMonth.startOf("month").toDate();
+  const endPreviousOfMonth = previousMonth.endOf("month").toDate();
+
+  const dataToday = await billsTotalPriceAndCountWithRange({
+    dayFrom: morning,
+    dayTo: night,
+    status: "closed",
+  });
+
+  const dataSevenDays = await billsTotalPriceAndCountWithRange({
+    dayFrom: sevenDaysAgo,
+    dayTo: yesterday,
+    status: "closed",
+  });
+
+  const TotalRevenue = {
+    title: "Total revenue",
+    value: dataToday?.totalPriceAll || 0,
+    percentage: percentageChange({
+      totalDay: dataToday?.totalPriceAll,
+      totalRange: dataSevenDays?.totalPriceAll,
+      averageDays: dataSevenDays?.totalCount,
+    }),
+    period: "Daily",
+  };
+
+  const TotalOrders = {
+    title: "Total orders",
+    value: dataToday?.totalCount || 0,
+    percentage: percentageChange({
+      totalDay: dataToday?.totalCount,
+      totalRange: dataSevenDays?.totalCount,
+      averageDays: dataSevenDays?.totalCount,
+    }),
+    period: "Daily",
+  };
+
+  const dataMonth = await billsTotalPriceAndCountWithRange({
+    dayFrom: startOfMonth,
+    dayTo: endOfMonth,
+    status: "closed",
+  });
+
+  const dataPreviousMonth = await billsTotalPriceAndCountWithRange({
+    dayFrom: startPreviousOfMonth,
+    dayTo: endPreviousOfMonth,
+    status: "closed",
+  });
+
+  const averageMonth = Math.round(
+    (dataMonth?.totalPriceAll || 0) / dataMonth?.totalCount
+  );
+
+  const AverageBill = {
+    title: "Average bill",
+    value: averageMonth,
+    percentage: percentageChange({
+      totalDay: averageMonth,
+      totalRange: dataPreviousMonth?.totalPriceAll,
+      averageDays: dataPreviousMonth?.totalCount,
+    }),
+    period: "Monthly",
+  };
+
+  const dataCancelOrderMonth = await ordersTotalPriceAndCountWithRange({
+    dayFrom: startOfMonth,
+    dayTo: endOfMonth,
+    status: "cancel",
+  });
+  const dataCancelOrderPreviousMonth = await ordersTotalPriceAndCountWithRange({
+    dayFrom: startPreviousOfMonth,
+    dayTo: endPreviousOfMonth,
+    status: "cancel",
+  });
+
+  const failureRateInMonth = percentageCancelAllCount({
+    cancelledOrders: dataCancelOrderMonth?.totalCount,
+    totalOrders: dataMonth?.totalCount,
+  });
+
+  const FailureRate = {
+    title: "Failure rate",
+    value: failureRateInMonth,
+    percentage: compareCancellationPercentage({
+      previousMonthCancelled: dataCancelOrderPreviousMonth?.totalCount,
+      previousMonthTotal: dataPreviousMonth?.totalCount,
+      currentMonthCancelled: dataCancelOrderMonth?.totalCount,
+      currentMonthTotal: dataMonth?.totalCount,
+    }),
+    period: "Monthly",
+  };
+
+  return [TotalRevenue, TotalOrders, AverageBill, FailureRate];
+};
+
+const generalTotal = async ({ period }) => {
+  const today = dayjs();
+  const startOfMonth = today.startOf("month");
+  const endOfMonth = today.endOf("month");
+  const startOfPreviousMonth = today.subtract(2, "month").startOf("month");
+  const startOfYear = today.startOf("year");
+  const endOfYear = today.endOf("year");
+
+  if (!period) {
+    const allDatesArray = Array.from(
+      { length: endOfMonth.diff(startOfMonth, "day") + 1 },
+      (_, index) => startOfMonth.add(index, "day").toDate()
+    );
+
+    const result = await BillsDAL.findAggregate(
+      aggregateRangeMonth({
+        dayFrom: startOfMonth.toDate(),
+        dayTo: endOfMonth.toDate(),
+        status: "closed",
+      })
+    );
+    return {
+      labels: allDatesArray.map((date) => Number(dayjs(date).format("DD"))),
+      datasets: [
+        {
+          label: "Total revenue month",
+          data: allDatesArray.map((date) => {
+            const resultItem = result.find(
+              (item) => item._id === dayjs(date).format("YYYY-MM-DD")
+            );
+            return resultItem ? resultItem.totalPriceAll : 0;
+          }),
+        },
+      ],
+    };
+  }
+
+  if (period === "quarter") {
+    const threeMonthsArray = Array.from({ length: 3 }, (_, index) =>
+      endOfMonth.subtract(index, "month")
+    );
+
+    const result = await BillsDAL.findAggregate(
+      aggregateRangeQuarter({
+        dayFrom: startOfPreviousMonth.toDate(),
+        dayTo: endOfMonth.toDate(),
+        status: "closed",
+      })
+    );
+    const monthName = threeMonthsArray.map((date) => date.format("MMMM"));
+    return {
+      labels: monthName.reverse(),
+      datasets: [
+        {
+          label: "Total revenue quarter",
+          data: threeMonthsArray
+            .map((date) => {
+              const resultItem = result.find(
+                (item) => item._id === dayjs(date).format("YYYY-MM")
+              );
+              return resultItem ? resultItem.totalPriceAll : 0;
+            })
+            .reverse(),
+        },
+      ],
+    };
+  }
+  if (period === "year") {
+    const monthsArray = Array.from({ length: 12 }, (_, index) =>
+      startOfYear.add(index, "month")
+    );
+
+    const result = await BillsDAL.findAggregate(
+      aggregateRangeQuarter({
+        dayFrom: startOfYear.toDate(),
+        dayTo: endOfYear.toDate(),
+        status: "closed",
+      })
+    );
+    const monthNameArr = monthsArray.map((date) => {
+      return date.format("MMMM");
+    });
+
+    return {
+      labels: monthNameArr,
+      datasets: [
+        {
+          label: "Total revenue year",
+          data: monthsArray.map((date) => {
+            const resultItem = result.find(
+              (item) => item._id === dayjs(date).format("YYYY-MM")
+            );
+
+            return resultItem ? resultItem.totalPriceAll : 0;
+          }),
+        },
+      ],
+    };
+  }
+  throw createError("Not data found", 404);
+};
 
 export const AnalyticsServices = {
   getTopSalesCategory,
+  general,
+  generalTotal,
 };

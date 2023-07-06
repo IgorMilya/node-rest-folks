@@ -75,6 +75,36 @@ export const generatedAmountDishesByParentCategory = (dishes) => {
   return filteredObjects.slice(0, 4);
 };
 
+export const percentageChange = ({ totalDay, totalRange, averageDays }) => {
+  if (!totalRange) return 100;
+  const average = totalRange / averageDays;
+
+  return Math.round(((totalDay - average) / average) * 100);
+};
+
+export const percentageCancelAllCount = ({ cancelledOrders, totalOrders }) => {
+  if (!cancelledOrders) return 0;
+
+  return Math.round((cancelledOrders / (totalOrders + cancelledOrders)) * 100);
+};
+
+export const compareCancellationPercentage = ({
+  previousMonthCancelled,
+  previousMonthTotal,
+  currentMonthCancelled,
+  currentMonthTotal,
+}) => {
+  if (!previousMonthCancelled) return 100;
+
+  const previousMonthPercentage =
+    (previousMonthCancelled / (previousMonthTotal + previousMonthCancelled)) *
+    100;
+  const currentMonthPercentage =
+    (currentMonthCancelled / (currentMonthTotal + currentMonthCancelled)) * 100;
+
+  return currentMonthPercentage - previousMonthPercentage;
+};
+
 export const aggregateDishes = [
   {
     $lookup: {
@@ -137,3 +167,87 @@ export const aggregateDishes = [
     },
   },
 ];
+
+export const aggregateDishesTime = ({ dayFrom, dayTo, status }) => {
+  return [
+    {
+      $match: {
+        $and: [
+          {
+            createdAt: {
+              $gte: dayFrom,
+              $lte: dayTo,
+            },
+          },
+          {
+            status,
+          },
+        ],
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalPriceAll: { $sum: "$totalPrice" },
+        totalCount: { $sum: 1 },
+      },
+    },
+  ];
+};
+
+export const aggregateRangeMonth = ({ dayFrom, dayTo, status }) => {
+  return [
+    {
+      $match: {
+        $and: [
+          {
+            createdAt: {
+              $gte: dayFrom,
+              $lte: dayTo,
+            },
+          },
+          {
+            status,
+          },
+        ],
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        totalPriceAll: { $sum: "$totalPrice" },
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+  ];
+};
+
+export const aggregateRangeQuarter = ({ dayFrom, dayTo, status }) => {
+  return [
+    {
+      $match: {
+        $and: [
+          {
+            createdAt: {
+              $gte: dayFrom,
+              $lte: dayTo,
+            },
+          },
+          {
+            status,
+          },
+        ],
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } },
+        totalPriceAll: { $sum: "$totalPrice" },
+      },
+    },
+  ];
+};
