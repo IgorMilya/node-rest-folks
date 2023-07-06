@@ -58,7 +58,8 @@ export const startBot = () => {
 };
 
 export const sendDEliveredMsg = async ({ phoneNumber, name }) => {
-    const client = await TelegaClientService.find({ phoneNumber: `+${phoneNumber}` });
+    const phoneNumberOnlyDigit = phoneNumber.replace(/\D/g, '');
+    const client = await TelegaClientService.find({ phoneNumber: `+${phoneNumberOnlyDigit}` });
 
     try {
         const [{ userId, name: tgName }] = client;
