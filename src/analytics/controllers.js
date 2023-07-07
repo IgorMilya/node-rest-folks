@@ -2,7 +2,7 @@ import { AnalyticsServices } from "./services.js";
 
 const topSalesCategory = async (req, res) => {
   try {
-    const data = await AnalyticsServices.getTopSalesCategory(req.query);
+    const data = await AnalyticsServices.topSalesCategory(req.query);
     return res.json(data);
   } catch (e) {
     res.status(e.statusCode || 500).json(e.message);
