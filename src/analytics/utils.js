@@ -124,3 +124,65 @@ export const generatedDate = () => {
     endOfYear,
   };
 };
+
+export const generatedArrayDateRangeMonth = ({
+  dateStart,
+  length,
+  indexDate,
+}) => {
+  return Array.from({ length }, (_, index) =>
+    dateStart.subtract(index, indexDate)
+  );
+};
+
+export const generatedArrayDays = ({ startOfMonth, endOfMonth }) => {
+  return Array.from(
+    { length: endOfMonth.diff(startOfMonth, "day") + 1 },
+    (_, index) => startOfMonth.add(index, "day")
+  );
+};
+
+export const generatedArrayDateYear = ({ startOfYear }) => {
+  return Array.from({ length: 12 }, (_, index) =>
+    startOfYear.add(index, "month")
+  );
+};
+
+export const generatedData = ({ dateArray, data, dateFormat }) => {
+  return dateArray.map((date) => {
+    const resultItem = data.find(
+      (item) => item._id === dayjs(date).format(dateFormat)
+    );
+    return resultItem ? resultItem.totalPriceAll : 0;
+  });
+};
+
+export const generatedGeneralTotalResponse = ({
+  labels,
+  title,
+  data,
+  dateArray,
+  dateFormat,
+  reverse,
+}) => {
+  const result = {
+    labels,
+    datasets: [
+      {
+        label: title,
+        data: generatedData({
+          data,
+          dateArray,
+          dateFormat,
+        }),
+      },
+    ],
+  };
+
+  if (reverse) {
+    result.labels.reverse();
+    result.datasets[0].data.reverse();
+  }
+
+  return result;
+};

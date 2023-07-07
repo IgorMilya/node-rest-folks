@@ -169,3 +169,43 @@ export const aggregateRangeOrderType = ({ dayFrom, dayTo, status }) => {
     },
   ];
 };
+
+export const aggregateAverageBillsRange = ({
+  dayFrom,
+  dayTo,
+  status,
+  format,
+}) => {
+  return [
+    {
+      $match: {
+        $and: [
+          {
+            createdAt: {
+              $gte: dayFrom,
+              $lte: dayTo,
+            },
+          },
+          {
+            status,
+          },
+        ],
+      },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: format, date: "$createdAt" } },
+        totalPriceAll: { $sum: "$totalPrice" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        totalPriceAll: {
+          $round: [{ $divide: ["$totalPriceAll", "$count"] }, 0],
+        },
+      },
+    },
+  ];
+};

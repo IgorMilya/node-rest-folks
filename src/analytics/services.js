@@ -5,7 +5,11 @@ import {
   filterWithCategory,
   generatedAmountDishes,
   generatedAmountDishesByParentCategory,
+  generatedArrayDateRangeMonth,
+  generatedArrayDateYear,
+  generatedArrayDays,
   generatedDate,
+  generatedGeneralTotalResponse,
   percentageCancelAllCount,
   percentageChange,
 } from "./utils.js";
@@ -18,9 +22,10 @@ import {
   aggregateRangeYearInMonth,
   aggregateDishesTime,
   aggregateRangeOrderType,
+  aggregateAverageBillsRange,
 } from "./aggregate.utils.js";
 
-const getTopSalesCategory = async ({ category }) => {
+const topSalesCategory = async ({ category }) => {
   const parentCategory = await CategoryDAL.findByOne({ _id: category });
   const subcategory = await CategoryDAL.findSubCategoryByCategory(category);
   const subcategoryID = subcategory.map((item) => item.id);
@@ -180,10 +185,7 @@ const generalTotal = async ({ period }) => {
   } = generatedDate();
 
   if (!period) {
-    const allDatesArray = Array.from(
-      { length: endOfMonth.diff(startOfMonth, "day") + 1 },
-      (_, index) => startOfMonth.add(index, "day").toDate()
-    );
+    const allDatesArray = generatedArrayDays({ startOfMonth, endOfMonth });
 
     const result = await BillsDAL.findAggregate(
       aggregateRangeDayInMonth({
@@ -192,26 +194,26 @@ const generalTotal = async ({ period }) => {
         status: "closed",
       })
     );
-    return {
-      labels: allDatesArray.map((date) => Number(dayjs(date).format("DD"))),
-      datasets: [
-        {
-          label: "Total revenue month",
-          data: allDatesArray.map((date) => {
-            const resultItem = result.find(
-              (item) => item._id === dayjs(date).format("YYYY-MM-DD")
-            );
-            return resultItem ? resultItem.totalPriceAll : 0;
-          }),
-        },
-      ],
-    };
+
+    const numberDays = allDatesArray.map((date) =>
+      Number(dayjs(date).format("DD"))
+    );
+
+    return generatedGeneralTotalResponse({
+      labels: numberDays,
+      title: "Total revenue month",
+      data: result,
+      dateArray: allDatesArray,
+      dateFormat: "YYYY-MM-DD",
+    });
   }
 
   if (period === "quarter") {
-    const threeMonthsArray = Array.from({ length: 3 }, (_, index) =>
-      endOfMonth.subtract(index, "month")
-    );
+    const threeMonthsArray = generatedArrayDateRangeMonth({
+      dateStart: endOfMonth,
+      length: 3,
+      indexDate: "month",
+    });
 
     const result = await BillsDAL.findAggregate(
       aggregateRangeYearInMonth({
@@ -220,28 +222,21 @@ const generalTotal = async ({ period }) => {
         status: "closed",
       })
     );
+
     const monthName = threeMonthsArray.map((date) => date.format("MMMM"));
-    return {
-      labels: monthName.reverse(),
-      datasets: [
-        {
-          label: "Total revenue quarter",
-          data: threeMonthsArray
-            .map((date) => {
-              const resultItem = result.find(
-                (item) => item._id === dayjs(date).format("YYYY-MM")
-              );
-              return resultItem ? resultItem.totalPriceAll : 0;
-            })
-            .reverse(),
-        },
-      ],
-    };
+
+    return generatedGeneralTotalResponse({
+      labels: monthName,
+      title: "Total revenue quarter",
+      data: result,
+      dateArray: threeMonthsArray,
+      dateFormat: "YYYY-MM",
+      reverse: true,
+    });
   }
+
   if (period === "year") {
-    const monthsArray = Array.from({ length: 12 }, (_, index) =>
-      startOfYear.add(index, "month")
-    );
+    const monthsArray = generatedArrayDateYear({ startOfYear });
 
     const result = await BillsDAL.findAggregate(
       aggregateRangeYearInMonth({
@@ -250,26 +245,76 @@ const generalTotal = async ({ period }) => {
         status: "closed",
       })
     );
-    const monthNameArr = monthsArray.map((date) => {
+
+    const monthName = monthsArray.map((date) => {
       return date.format("MMMM");
     });
 
-    return {
-      labels: monthNameArr,
-      datasets: [
-        {
-          label: "Total revenue year",
-          data: monthsArray.map((date) => {
-            const resultItem = result.find(
-              (item) => item._id === dayjs(date).format("YYYY-MM")
-            );
-
-            return resultItem ? resultItem.totalPriceAll : 0;
-          }),
-        },
-      ],
-    };
+    return generatedGeneralTotalResponse({
+      labels: monthName,
+      title: "Total revenue year",
+      data: result,
+      dateArray: monthsArray,
+      dateFormat: "YYYY-MM",
+    });
   }
+
+  throw createError("Not data found", 404);
+};
+
+const generalAverageTotalPrice = async ({ period }) => {
+  const { startOfMonth, endOfMonth, startOfYear, endOfYear } = generatedDate();
+
+  if (!period) {
+    const allDatesArray = generatedArrayDays({ startOfMonth, endOfMonth });
+
+    const numberDays = allDatesArray.map((date) =>
+      Number(dayjs(date).format("DD"))
+    );
+
+    const result = await BillsDAL.findAggregate(
+      aggregateAverageBillsRange({
+        dayFrom: startOfMonth.toDate(),
+        dayTo: endOfMonth.toDate(),
+        status: "closed",
+        format: "%Y-%m-%d",
+      })
+    );
+
+    return generatedGeneralTotalResponse({
+      labels: numberDays,
+      title: "Average total revenue month",
+      data: result,
+      dateArray: allDatesArray,
+      dateFormat: "YYYY-MM-DD",
+    });
+  }
+
+  if (period === "year") {
+    const monthsArray = generatedArrayDateYear({ startOfYear });
+
+    const monthName = monthsArray.map((date) => {
+      return date.format("MMMM");
+    });
+
+    const result = await BillsDAL.findAggregate(
+      aggregateAverageBillsRange({
+        dayFrom: startOfYear.toDate(),
+        dayTo: endOfYear.toDate(),
+        status: "closed",
+        format: "%Y-%m",
+      })
+    );
+
+    return generatedGeneralTotalResponse({
+      labels: monthName,
+      title: "Average total revenue year",
+      data: result,
+      dateArray: monthsArray,
+      dateFormat: "YYYY-MM",
+    });
+  }
+
   throw createError("Not data found", 404);
 };
 
@@ -336,8 +381,9 @@ const orderTypeTotal = async ({ period }) => {
 };
 
 export const AnalyticsServices = {
-  getTopSalesCategory,
+  topSalesCategory,
   general,
   generalTotal,
   orderTypeTotal,
+  generalAverageTotalPrice,
 };

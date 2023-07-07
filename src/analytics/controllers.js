@@ -1,6 +1,6 @@
 import { AnalyticsServices } from "./services.js";
 
-const getTopSalesCategory = async (req, res) => {
+const topSalesCategory = async (req, res) => {
   try {
     const data = await AnalyticsServices.getTopSalesCategory(req.query);
     return res.json(data);
@@ -34,10 +34,19 @@ const orderTypeTotal = async (req, res) => {
     res.status(e.statusCode || 500).json(e.message);
   }
 };
+const averageTotal = async (req, res) => {
+  try {
+    const data = await AnalyticsServices.generalAverageTotalPrice(req.query);
+    return res.json(data);
+  } catch (e) {
+    res.status(e.statusCode || 500).json(e.message);
+  }
+};
 
 export const AnalyticsControllers = {
-  getTopSalesCategory,
+  topSalesCategory,
   general,
   generalTotal,
   orderTypeTotal,
+  averageTotal,
 };
