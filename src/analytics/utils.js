@@ -79,9 +79,10 @@ export const generatedAmountDishesByParentCategory = (dishes) => {
 
 export const percentageChange = ({ totalDay, totalRange, averageDays }) => {
   if (!totalRange) return 100;
+
   const average = totalRange / averageDays;
 
-  return Math.round(((totalDay - average) / average) * 100);
+  return Math.round((((totalDay || 0) - average) / average) * 100);
 };
 
 export const percentageCancelAllCount = ({ cancelledOrders, totalOrders }) => {
