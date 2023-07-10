@@ -29,7 +29,9 @@ const update = async (delivery) => {
     delivery.$unset = { courier: 1 };
   }
 
-  return DeliveryDB.findByIdAndUpdate(delivery.id, delivery, { new: true });
+  return DeliveryDB.findByIdAndUpdate(delivery.id, delivery, {
+    new: true,
+  }).populate("order");
 };
 
 const updateOne = async ({ find, data }) => {

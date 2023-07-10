@@ -2,6 +2,7 @@ import { DeliveryDAL } from "./DeliveryDAL.js";
 import { sendDEliveredMsg } from "../bot/telegramBot.js";
 import { createError } from "../utils/error.js";
 import { BillsDAL } from "../bills/BillsDAL.js";
+import { calculateTotalPriceWithTenPercentDishes } from "./utils.js";
 
 const create = async (delivery) => {
   const createdDelivery = await DeliveryDAL.create(delivery);
@@ -44,6 +45,10 @@ const update = async (delivery) => {
       paymentMethod: clientInfo.paymentMethod,
       email: clientInfo?.email || "",
       status: "closed",
+      dishes: updateDelivery?.order?.dishes,
+      totalPrice: calculateTotalPriceWithTenPercentDishes(
+        updateDelivery?.order?.dishes
+      ),
     });
   }
 

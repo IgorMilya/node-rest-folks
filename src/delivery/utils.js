@@ -1,50 +1,8 @@
-export const getDeliveryDATA = [
-    {
-        $lookup: {
-            from: 'orders',
-            localField: 'orderID',
-            foreignField: '_id',
-            as: 'ordersData',
-        },
-    },
-    {
-        $unwind: '$ordersData',
-    },
-    {
-        $addFields: {
-            id: '$_id',
-            orderNumber: '$ordersData.orderNumber',
-            description: '$ordersData.description',
-            dishes: '$ordersData.dishes',
-        },
-    },
-    {
-        $lookup: {
-            from: 'users',
-            localField: 'courier',
-            foreignField: '_id',
-            as: 'courierData',
-        },
-    },
-    {
-        $unwind: '$courierData',
-    },
-    {
-        $addFields: {
-            courier: {
-                firstName: '$courierData.firstName',
-                secondName: '$courierData.secondName',
-            },
-        },
-    },
-    {
-        $project: {
-            _id: 0,
-            ordersData: 0,
-            courierData: 0,
-            dishes: {
-                _id: 0,
-            },
-        },
-    },
-];
+export const calculateTotalPriceWithTenPercentDishes = (calculateArray) => {
+  if (!calculateArray) return 0;
+
+  const result = calculateArray.reduce((acc, curr) => {
+    return acc + curr?.dishTotalPrice || 0;
+  }, 0);
+  return result * 0.1 + result;
+};
