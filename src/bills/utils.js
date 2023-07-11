@@ -1,3 +1,6 @@
+import BillDB from './BillsModel.js';
+import OrderDB from '../orders/OrdersModel.js';
+
 export const getBillsDATA = [
     {
         $lookup: {
@@ -62,4 +65,33 @@ export const checkTotalPrice = ({ dishes, totalPrice }) => {
     if (totalPrice !== calculatedPriceWithTenPercent) {
         throw new Error('it isn`t correct totalPrice');
     }
+};
+
+export const createBillsInDatabase = async () => {
+    const orders = await OrderDB.find();
+
+    orders.map(async orders => {
+        const tip = Math.floor(Math.random() * (10 - 2 + 1)) + 10;
+        const randomIndex = Math.floor(Math.random() * 3);
+        let paymentMethod;
+        if (randomIndex === 0) {
+            paymentMethod = 'Cash';
+        } else if (randomIndex === 1) {
+            paymentMethod = 'MasterCard';
+        } else {
+            paymentMethod = 'Visa';
+        }
+
+        const element = {
+            createdAt: orders.createdAt,
+            updatedAt: orders.createdAt,
+            orderID: orders._id,
+            totalPrice: orders.totalPrice,
+            status: 'closed',
+            paymentMethod,
+            tip,
+        };
+
+        await BillDB.create(element);
+    });
 };

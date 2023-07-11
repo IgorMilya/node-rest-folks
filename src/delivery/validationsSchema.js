@@ -1,8 +1,9 @@
 import Joi from 'joi';
 
 export const deliveryValidateSchema = Joi.object({
-    status: Joi.string().pattern(/^opened|delivering|rejected|done$/),
-    order: Joi.string().required(),
+    status: Joi.string().pattern(/^opened|closed|cancel$/),
+    order: Joi.string(),
+    bill: Joi.string(),
     time: Joi.number().required(),
     clientInfo: Joi.object({
         name: Joi.string().required(),
@@ -12,7 +13,6 @@ export const deliveryValidateSchema = Joi.object({
         description: Joi.string(),
     }),
     courier: Joi.string(),
-    statusPriority: Joi.number().integer(),
     address: {
         street: Joi.string().required(),
         latitude: Joi.number(),
