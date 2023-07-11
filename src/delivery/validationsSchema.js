@@ -9,7 +9,7 @@ export const deliveryValidateSchema = Joi.object({
         name: Joi.string().required(),
         phoneNumber: Joi.string().required(),
         paymentMethod: Joi.string().required(),
-        email: Joi.string().email(),
+        email: Joi.string(),
         description: Joi.string(),
     }),
     courier: Joi.string(),
