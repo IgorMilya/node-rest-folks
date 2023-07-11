@@ -15,6 +15,10 @@ import { staticDefaultPath, staticRouter } from './static/routes.js';
 import { startBot } from './src/bot/telegramBot.js';
 import { analyticsDefaultPath, analyticsRouter } from './src/analytics/routes.js';
 
+import { createOrdersInDatabase } from './src/orders/utils.js';
+import { createBillsInDatabase } from './src/bills/utils.js';
+import { createDEliveriesInDatabase } from './src/delivery/utils.js';
+
 export const app = express();
 
 app.use(cors({ origin: true, credentials: true }));
@@ -41,8 +45,8 @@ app.use(analyticsDefaultPath, analyticsRouter);
 
 startBot();
 
-// import { createOrdersInDatabase } from './src/orders/utils.js';
-// createOrdersInDatabase();
-
-// import { createBillsInDatabase } from './src/bills/utils.js';
-// createBillsInDatabase();
+const createDB = async () => {
+    await createOrdersInDatabase();
+    await createBillsInDatabase();
+    await createDEliveriesInDatabase();
+};

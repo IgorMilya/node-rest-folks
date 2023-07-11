@@ -48,13 +48,16 @@ export const createOrdersInDatabase = async () => {
 
         const tables = ['T-01', 'T-02', 'T-03', 'T-04', 'T-05', 'T-06', 'T-07', 'T-08', 'T-09', 'T-10', 'T-11', 'T-12', 'T-13'];
 
-        const randomIndex = Math.floor(Math.random() * 2);
+        const randomIndex = Math.floor(Math.random() * 3);
         const randomIndexT = Math.floor(Math.random() * 13);
 
         let orderType;
         let table;
         if (randomIndex === 0) {
             orderType = 'takeAway';
+            table = '-';
+        } else if (randomIndex === 1) {
+            orderType = 'delivery';
             table = '-';
         } else {
             orderType = 'dineIn';
