@@ -58,6 +58,8 @@ const login = async (req, res) => {
     res.cookie("refreshToken", data.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
     res.json({ data: data.data, accessToken: data.accessToken });
   } catch (err) {
@@ -84,6 +86,8 @@ const refresh = async (req, res) => {
     res.cookie("refreshToken", data.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     res.json({ data: data.data, accessToken: data.accessToken });
